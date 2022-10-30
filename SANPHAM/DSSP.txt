@@ -1,0 +1,2 @@
+chứa thông tin sản phẩm, mỗi chuỗi chứ thông tin 1 nhân viên
+các thuộc tính ngắn cách nhau bởi dấu ','
