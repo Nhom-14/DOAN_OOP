@@ -1,4 +1,4 @@
-package DoAnHDT;
+package SANPHAM;
 
 import java.util.Scanner;
 
