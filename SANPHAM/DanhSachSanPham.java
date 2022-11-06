@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class DanhSachSanPham {
     private ArrayList<SanPham> sp;
+    static Scanner input= new Scanner(System.in);
     public DanhSachSanPham(){
         this.sp=new ArrayList<>();
     }
@@ -15,7 +16,7 @@ public class DanhSachSanPham {
         return sp;
     }
     public void ThemSP(){
-        Scanner input= new Scanner(System.in);
+        
         System.out.print("Loai san pham:\n");
         System.out.print("1.Food\n");
         System.out.print("2.Drink\n");
@@ -103,8 +104,7 @@ public class DanhSachSanPham {
             }
         }
     }
-    public static void Menu(){
-        Scanner input=new Scanner(System.in);
+    public void Menu(){
         System.out.print("-------Quan ly san pham-------");
         System.out.print("\n--------1.Them san pham-------");
         System.out.print("\n--------2.Sua san pham--------");
@@ -126,8 +126,5 @@ public class DanhSachSanPham {
             case 6:
             case 7:
         }
-    }
-    public static void main(String[] args){
-        Menu();
     }
 }

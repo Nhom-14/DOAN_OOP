@@ -8,6 +8,7 @@ class SanPham{
     protected int GiaBan;
     protected int GiaNhap;
     protected int SoLuong;
+    static Scanner input = new Scanner(System.in);
     public SanPham(){
         this.MaSP="";
         this.TenSP="";
@@ -55,7 +56,6 @@ class SanPham{
         this.SoLuong=Soluong;
     }
     public void nhapSP(){
-        Scanner input=new Scanner (System.in);
         System.out.print("Nhap ten san pham: ");
         setTenSP(input.nextLine());
         System.out.print("Nhap gia ban: ");
