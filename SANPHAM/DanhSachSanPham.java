@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DanhSachSanPham {
-    private static ArrayList<SanPham> sp;
+    private ArrayList<SanPham> sp;
     public DanhSachSanPham(){
         sp=new ArrayList<SanPham>();
     }
     public DanhSachSanPham(ArrayList<SanPham> sp){
-        DanhSachSanPham.sp=sp;
+        this.sp=sp;
     }
     public ArrayList<SanPham> getarrsp(){
         return sp;
     }
-    public static void ThemSP(){
+    public void ThemSP(){
         Scanner input= new Scanner(System.in);
+        SanPham a;
         System.out.print("Loai san pham:\n");
         System.out.print("1.Food\n");
         System.out.print("2.Drink\n");
@@ -23,21 +24,19 @@ public class DanhSachSanPham {
         int choice=input.nextInt();
         switch(choice){
             case 1:{
-                SanPham a=new Food();
+                a=new Food();
                 a.nhapSP();
                 sp.add(a);
-                XuatSP();
-                Menu();
                 break;
             }
             case 2:{
-                SanPham a=new Drink();
+                a=new Drink();
                 a.nhapSP();
                 sp.add(a);
                 break;
             }
             case 3:{
-                SanPham a=new Combo();
+                a=new Combo();
                 a.nhapSP();
                 sp.add(a);
                 break;
@@ -82,10 +81,24 @@ public class DanhSachSanPham {
             }
         }
     }
-    public static void XuatSP(){
+    public void XuatSP(){
        sp.forEach(product->{
            System.out.print(product);
        });
+    }
+    public void XuatFood(){
+        sp.forEach(product->{
+            if(product instanceof Food){
+                System.out.print(product);
+            }
+        });
+    }
+    public void XuatDrink(){
+        sp.forEach(product->{
+            if(product instanceof Drink){
+                System.out.print(product);
+            }
+        });
     }
     public void DocGhiFile(){
        //khó vãi loz
@@ -110,7 +123,7 @@ public class DanhSachSanPham {
             }
         }
     }
-    public static void Menu(){
+    public void Menu(){
         Scanner input=new Scanner(System.in);
         System.out.print("-------Quan ly san pham-------");
         System.out.print("\n--------1.Them san pham-------");
@@ -125,6 +138,8 @@ public class DanhSachSanPham {
         switch(choice){
             case 1:{
                 ThemSP();
+                Menu();
+                break;
             }  
             case 2:
             case 3:
