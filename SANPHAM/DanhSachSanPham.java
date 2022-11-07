@@ -1,20 +1,20 @@
-package DoAnHDT;
+package DOAN_OOP.SANPHAM;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DanhSachSanPham {
-    private ArrayList<SanPham> sp;
+    private static ArrayList<SanPham> sp;
     public DanhSachSanPham(){
-        this.sp=new ArrayList<>();
+        sp=new ArrayList<SanPham>();
     }
     public DanhSachSanPham(ArrayList<SanPham> sp){
-        this.sp=sp;
+        DanhSachSanPham.sp=sp;
     }
     public ArrayList<SanPham> getarrsp(){
         return sp;
     }
-    public void ThemSP(){
+    public static void ThemSP(){
         Scanner input= new Scanner(System.in);
         System.out.print("Loai san pham:\n");
         System.out.print("1.Food\n");
@@ -23,25 +23,30 @@ public class DanhSachSanPham {
         int choice=input.nextInt();
         switch(choice){
             case 1:{
-                Food a=new Food();
+                SanPham a=new Food();
                 a.nhapSP();
                 sp.add(a);
+                XuatSP();
+                Menu();
+                break;
             }
             case 2:{
-                Drink a=new Drink();
+                SanPham a=new Drink();
                 a.nhapSP();
                 sp.add(a);
+                break;
             }
             case 3:{
-                Combo a=new Combo();
+                SanPham a=new Combo();
                 a.nhapSP();
                 sp.add(a);
+                break;
             }
         }
     }
     public void SuaSPbyMaSP(String masp){
         for(int i=0;i<sp.size();i++){
-            SanPham a=new SanPham();
+            SanPham a;
             a=sp.get(i);
             if(a.getMaSP().equals(masp)){
                 a.nhapSP();
@@ -51,7 +56,7 @@ public class DanhSachSanPham {
     }
     public void SuaSPbyTenSP(String tensp){
         for(int i=0;i<sp.size();i++){
-            SanPham a=new SanPham();
+            SanPham a;
             a=sp.get(i);
             if(a.getTenSP().equals(tensp)){
                 a.nhapSP();
@@ -61,7 +66,7 @@ public class DanhSachSanPham {
     }
     public void XoaSPbyMaSP(String masp){
         for(int i=0;i<sp.size();i++){
-            SanPham a=new SanPham();
+            SanPham a;
             a=sp.get(i);
             if(a.getMaSP().equals(masp)){
                 sp.remove(i);
@@ -69,7 +74,7 @@ public class DanhSachSanPham {
         }
     }
     public void XoaSPbyTenSP(String tensp){
-        SanPham a=new SanPham();
+        SanPham a;
         for(int i=0;i<sp.size();i++){
             a=sp.get(i);
             if(a.getTenSP().equals(tensp)){
@@ -77,15 +82,17 @@ public class DanhSachSanPham {
             }
         }
     }
-    public void XuatSP(){
-       //khó vãi loz 
+    public static void XuatSP(){
+       sp.forEach(product->{
+           System.out.print(product);
+       });
     }
     public void DocGhiFile(){
        //khó vãi loz
     }
     public void TimKiemSPbyMaSP(String masp){
         for(int i=0;i<sp.size();i++){
-            SanPham a=new SanPham();
+            SanPham a;
             a=sp.get(i);
             if(a.getMaSP().contains(masp)){
                 a.xuatSP();
@@ -95,7 +102,7 @@ public class DanhSachSanPham {
     }
     public void TimKiemSPbyTenSP(String tensp){
         for(int i=0;i<sp.size();i++){
-            SanPham a=new SanPham();
+            SanPham a;
             a=sp.get(i);
             if(a.getTenSP().contains(tensp)){
                 a.xuatSP();
@@ -117,7 +124,7 @@ public class DanhSachSanPham {
         int choice=input.nextInt();
         switch(choice){
             case 1:{
-                
+                ThemSP();
             }  
             case 2:
             case 3:
@@ -128,6 +135,8 @@ public class DanhSachSanPham {
         }
     }
     public static void main(String[] args){
-        Menu();
+        DanhSachSanPham a;
+        a=new DanhSachSanPham();
+        a.Menu();
     }
 }
