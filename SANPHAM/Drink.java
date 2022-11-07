@@ -1,4 +1,4 @@
-package SANPHAM;
+package DOAN_OOP.SANPHAM;
 
 public class Drink extends SanPham{
     public Drink(){
