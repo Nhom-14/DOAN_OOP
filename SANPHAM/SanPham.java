@@ -59,11 +59,11 @@ class SanPham{
         System.out.print("Nhap ten san pham: ");
         setTenSP(input.nextLine());
         System.out.print("Nhap gia ban: ");
-        setGiaBan(input.nextInt());
+        setGiaBan(Integer.parseInt(input.nextLine()));
         System.out.print("Nhap gia nhap: ");
-        setGiaNhap(input.nextInt());
+        setGiaNhap(Integer.parseInt(input.nextLine()));
         System.out.print("Nhap so luong: ");
-        setSoLuong(input.nextInt());
+        setSoLuong(Integer.parseInt(input.nextLine()));
     }
     public void xuatSP(){
         System.out.print("Ma san pham: "+getMaSP()+" Ten san pham:" +getTenSP()+" Gia ban:"+getGiaBan()+" Gia nhap: "+getGiaNhap()+" So luong: "+getSoLuong()+"\n");
