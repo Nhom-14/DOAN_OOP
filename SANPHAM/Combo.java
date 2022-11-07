@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 package DOAN_OOP.SANPHAM;
+=======
+package SANPHAM;
+>>>>>>> d1a60c510ca9fe8cb6a9c063323a9f7664cb019f
 
 import java.util.Scanner;
 
 public class Combo extends SanPham{
     SanPham [] arrSP;
     private int n;
+    static Scanner input=new Scanner(System.in);
     public Combo(){
         this.arrSP=null;
         this.n=0;
@@ -23,7 +28,6 @@ public class Combo extends SanPham{
         return arrSP;
     }
     public void nhapSP(){
-        Scanner input=new Scanner(System.in);
         System.out.print("Nhap so luong san pham trong combo: ");
         setN(input.nextInt());
         arrSP=new SanPham[n];

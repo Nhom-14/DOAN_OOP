@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 package DOAN_OOP.SANPHAM;
+=======
+package SANPHAM;
+>>>>>>> d1a60c510ca9fe8cb6a9c063323a9f7664cb019f
 
 public class Food extends SanPham {
     public Food(){
