@@ -42,13 +42,12 @@ public class Danhsachkhachhang extends Khachhang {
     }
     public void XoaKhachhang(){    
        int index = -1;
-       for(int i = 0;i<KHlist.size();i++){
            System.out.printf("Nhap ma khach hang can xoa: ");
            String id = sc.nextLine();
         for(int j=0;j<KHlist.size();j++){
             if(KHlist.get(j).getmakh().equalsIgnoreCase(id)){
                 index = j;
-            }
+           
         }
         if(index == -1)
             System.out.println("Khong tim thay khach hang");
@@ -70,6 +69,22 @@ public class Danhsachkhachhang extends Khachhang {
             System.out.println("Khong tim thay khach hang.");
         else KHlist.get(index).output();
     }
+    public Khachhang Timkh(){
+        Khachhang timkiem = new Khachhang();
+          System.out.printf("Nhap ma khach hang can xoa: ");
+         String id = sc.nextLine();
+         int index = -1;
+        for(int i=0;i<KHlist.size();i++){
+            if(KHlist.get(i).getmakh().equalsIgnoreCase(id)){
+                    index = i;
+                    timkiem = KHlist.get(i);
+                    
+            }
+        }
+            return timkiem;
+    }
+    
+    
     public void SuaKhachhang(){
         System.out.println("Nhap ma khach hang can sua: ");
         String id = sc.nextLine();
