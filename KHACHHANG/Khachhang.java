@@ -2,6 +2,9 @@ package KHACHHANG;
 
 import BASE.date;
 import BASE.ConNguoi;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.CheckedOutputStream;
 
 public class KhachHang extends ConNguoi {
     private String MaKH;
@@ -32,8 +35,21 @@ public class KhachHang extends ConNguoi {
         this.MaKH = maKH;
     }
     public void setMaKH() {
-        System.out.print("Nhap ma khach hang: ");
-        setMaKH(input.nextLine());
+        String ddmkh = "^\\d{3}$";
+        boolean check = false;
+        do {
+            System.out.print("Nhap ma khach hang(3 chu so): ");
+            String mkh = input.nextLine();
+            Pattern pattern = Pattern.compile(ddmkh);
+            Matcher matcher;
+            matcher = pattern.matcher(mkh);
+            if (matcher.find()) {
+                check = true;
+                setMaKH(mkh);
+            } else {
+                System.out.println("Khong hop le, hay nhap lai.");
+            }
+        } while (check == false);
     }
 
     public String getMaKH() {
