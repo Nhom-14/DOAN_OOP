@@ -1,75 +1,95 @@
-package KHACHHANG;
+package BASE;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ConNGuoi {
-    private String ten;
-    private date NgaySinh;
-    private boolean GioiTinh; // nam(0), nữ(1)
-    private address DiaChi;
-    private String SDT;
-    static Scanner sc = new Scanner(System.in);
+public class ConNguoi {
+    protected String Ten;
+    protected date NgaySinh;
+    protected boolean GioiTinh; // nam(0), nữ(1)
+    protected String DiaChi;
+    protected String SDT;
+    public static Scanner input = new Scanner(System.in);
 
-    public ConNGuoi() {
-        ten = null;
+    public ConNguoi() {
+        Ten = null;
         NgaySinh = new date();
         GioiTinh = false;
-        DiaChi = new address();
         SDT = null;
     }
 
-    public ConNGuoi(String t, date ns, boolean gt, address dc, String sdt) {
-        this.ten = t;
+    public ConNguoi(String t, date ns, boolean gt, String dc, String sdt) {
+        this.Ten = t;
         this.NgaySinh = new date(ns);
         this.GioiTinh = gt;
-        this.DiaChi = new address(dc);
+        this.DiaChi = dc;
         this.SDT = sdt;
     }
 
-    public ConNGuoi(ConNGuoi orther) {
-        this.ten = orther.ten;
+    public ConNguoi(ConNguoi orther) {
+        this.Ten = orther.Ten;
         this.NgaySinh = new date(orther.NgaySinh);
         this.GioiTinh = orther.GioiTinh;
-        this.DiaChi = new address(orther.DiaChi);
+        this.DiaChi = orther.DiaChi;
         this.SDT = orther.SDT;
     }
 
     public void setTen(String ten) {
-        this.ten = ten;
+        this.Ten = ten;
+    }
+    public void setTen() {
+        System.out.print("Ten: ");
+        setTen(input.nextLine());
     }
 
     public String getTen() {
-        return ten;
+        return Ten;
     }
 
     public void setNgaySinh(date ngaySinh) {
         NgaySinh = ngaySinh;
+    }
+    public void setNgaySinh() {
+        System.out.println("Ngay sinh: ");
+        NgaySinh.NhapDate();
     }
 
     public date getNgaySinh() {
         return NgaySinh;
     }
 
+    public void setDiaChi(String diaChi) {
+        DiaChi = diaChi;
+    }
+    public void setDiaChi() {
+        System.out.print("Nhap dia chi: ");
+       setDiaChi(input.nextLine());
+    }
+
+    public String getDiaChi() {
+        return DiaChi;
+    }
+
     public void setGioiTinh(boolean gioiTinh) {
         GioiTinh = gioiTinh;
+    }
+    public void setGioiTinh() {
+        System.out.print("Gioi tinh (Nam[0], Nu[1]): ");
+        int c = Integer.parseInt(input.nextLine());
+        checkGioiTinh(c);
     }
 
     public boolean getGioiTinh() {
         return GioiTinh;
     }
 
-    public void setDiaChi(address diaChi) {
-        DiaChi = diaChi;
-    }
-
-    public address getDiaChi() {
-        return DiaChi;
-    }
-
     public void setSDT(String sDT) {
         SDT = sDT;
+    }
+    public void setSDT() {
+        System.out.print("So dien thoai: ");
+        checkSDT(input.nextLine());
     }
 
     public String getSDT() {
@@ -80,7 +100,7 @@ public class ConNGuoi {
         int soLanLam = 1;
         do {
             if(soLanLam > 1) {
-                c = Integer.parseInt(sc.nextLine());
+                c = Integer.parseInt(input.nextLine());
             }
             if (c == 0) {
                 setGioiTinh(false);
@@ -109,23 +129,17 @@ public class ConNGuoi {
                 trueInput = false;
                 System.out.println("Da nhap sai moi nhap lai: ");
                 System.out.print("So dien thoai: ");
-                s = sc.nextLine();
+                s = input.nextLine();
             }
         } while (trueInput == false);
     }
 
-    public void nhap() {
-        System.out.print("Ten: ");
-        setTen(sc.nextLine());
-        System.out.println("Ngay sinh: ");
-        NgaySinh.NhapDate();
-        System.out.print("Gioi tinh (Nam[0], Nu[1]): ");
-        int c = Integer.parseInt(sc.nextLine());
-        checkGioiTinh(c);
-        System.out.println("Dia chi: ");
-        DiaChi.inAddress();
-        System.out.print("So dien thoai: ");
-        checkSDT(sc.nextLine());
+    public void Nhap() {
+        setTen();
+        setNgaySinh();
+        setGioiTinh();
+        setDiaChi();
+        setSDT();
     }
 
 

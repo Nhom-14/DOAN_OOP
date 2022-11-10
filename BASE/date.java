@@ -1,12 +1,13 @@
-package KHACHHANG;
+package BASE;
+
 import java.util.Calendar;
 import java.util.Scanner;
 
-public class date  {
+public class date {
     private int ngay;
     private int thang;
     private int nam;
-    static Scanner sc = new Scanner(System.in);
+    static Scanner input = new Scanner(System.in);
 
     public date() {
         ngay = 0;
@@ -33,16 +34,16 @@ public class date  {
         ngay = t.get(Calendar.DAY_OF_MONTH);
     }
 
-    public void setNgay(int ngay) {
-        this.ngay = ngay;
+    public void setNam(int nam) {
+        this.nam = nam;
     }
 
     public void setThang(int thang) {
         this.thang = thang;
     }
 
-    public void setNam(int nam) {
-        this.nam = nam;
+    public void setNgay(int ngay) {
+        this.ngay = ngay;
     }
 
     public int getNam() {
@@ -57,14 +58,58 @@ public class date  {
         return thang;
     }
 
-    boolean checkYear(int year) {
+    public void NhapDate() {
+        boolean check = true;
+        do {
+            System.out.print("Nhap ngay thang nam (dd/mm/yy): ");
+            String s = input.nextLine();
+            String a[] = s.split("/");
+            setNam(Integer.parseInt(a[2]));
+            if (checkMonth(Integer.parseInt(a[1]))) {
+                check = true;
+                setThang(Integer.parseInt(a[1]));
+                if (checkDay(Integer.parseInt(a[0]))) {
+                    check = true;
+                    setNgay(Integer.parseInt(a[0]));
+                } else {
+                    check = false;
+                    System.out.println("Nhap sai thong tin, moi nhap lai!");
+                }
+            } else {
+                check = false;
+                System.out.println("Nhap sai thong tin, moi nhap lai!");
+            }
+        } while (check == false);
+    }
+
+    public String toString() {
+        return ngay + "/" + thang + "/" + nam;
+    }
+
+    public void Tachtt(String d) {
+        String a[] = d.split("/");
+        setNam(Integer.parseInt(a[2]));
+        setThang(Integer.parseInt(a[1]));
+        setNgay(Integer.parseInt(a[0]));
+    }
+
+    public boolean checkYear(int year) {
         return (((year % 4 == 0) && (year % 100 != 0)) ||
                 (year % 400 == 0));
     }
 
-    void checkDay(boolean nn) {
+    public boolean checkMonth(int month) {
+        if (month > 12 || month < 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean checkDay(int d) {
+        boolean day = true;
         int DayinT2;
-        if (nn == true) {
+        if (checkYear(nam)) {
             DayinT2 = 29;
         } else {
             DayinT2 = 28;
@@ -77,55 +122,27 @@ public class date  {
             case 8:
             case 10:
             case 12: {
-                do {
-                    System.out.print("Nhap ngay: ");
-                    setNgay(Integer.parseInt(sc.nextLine()));
-                    if (ngay > 30 || ngay < 1) {
-                        System.out.println("Ngay khong hop le, moi nhap lai!");
-                    }
-                } while (ngay > 30 || ngay < 1);
+                if (d > 30 || d < 1) {
+                    day = false;
+                }
                 break;
             }
             case 4:
             case 6:
             case 9:
             case 11: {
-                do {
-                    System.out.print("Nhap ngay: ");
-                    setNgay(Integer.parseInt(sc.nextLine()));
-                    if (ngay > 31 || ngay < 1) {
-                        System.out.println("Ngay khong hop le, moi nhap lai!");
-                    }
-                } while (ngay > 31 || ngay < 1);
+
+                if (d > 31 || d < 1) {
+                    day = false;
+                }
                 break;
             }
-            default: {
-                do {
-                    System.out.print("Nhap ngay: ");
-                    setNgay(Integer.parseInt(sc.nextLine()));
-                    if (ngay > DayinT2 || ngay < 1) {
-                        System.out.println("Ngay khong hop le, moi nhap lai!");
-                    }
-                } while (ngay > DayinT2 || ngay < 1);
+            case 2: {
+                if (d > DayinT2 || d < 1) {
+                    day = false;
+                }
             }
         }
+        return day;
     }
-
-    public void NhapDate() {
-        System.out.print("Nhap nam: ");
-        setNam(Integer.parseInt(sc.nextLine()));
-        do {
-            System.out.print("Nhap thang: ");
-            setThang(Integer.parseInt(sc.nextLine()));
-            if (thang > 12 || thang < 1) {
-                System.out.println("Thang khong hop le, moi nhap lai!");
-            }
-        } while (thang < 1 || thang > 12);
-        checkDay(checkYear(nam));
-    }
-
-    public String toString() {
-        return ngay + "/" + thang + "/" + nam;
-    }
-    
 }
