@@ -1,4 +1,4 @@
-package DOAN_OOP.SANPHAM;
+package SANPHAM;
 
 import java.util.Scanner;
 
