@@ -4,7 +4,6 @@ import BASE.date;
 import BASE.ConNguoi;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.CheckedOutputStream;
 
 public class KhachHang extends ConNguoi {
     private String MaKH;
