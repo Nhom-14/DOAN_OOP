@@ -1,90 +1,121 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package khachhang;
+package KHACHHANG;
 
-import java.util.Scanner;
-/**
- *
- * @author ADMIN
- */
-public class Khachhang {
-       private String makh;
-       private String tenkh;
-       private String sdt;
-       private String diachi;
-       private int namsinh;
+import BASE.date;
+import BASE.ConNguoi;
 
-    public Scanner sc = new Scanner(System.in);
-    public Khachhang(){}
-    
-    public Khachhang(String makh, String tenkh, String sdt, String diachi,int namsinh){
-        this.makh = makh;
-        this.tenkh = tenkh;
-        this.sdt = sdt;
-        this.diachi = diachi;
-        this.namsinh = namsinh;
-    }
-    
-    public String getmakh(){
-        return makh;}
-    public void setmakh(String makh){
-        System.out.println("Nhap ma khach hang: ");
-        makh = sc.nextLine();
-        this.makh = makh;
-    }
-    public String gettenkh(){
-        return tenkh;
-    }
-    public void settenkh(String tenkh){
-        System.out.println("Nhap ten khach hang: ");
-        tenkh = sc.nextLine();
-        this.tenkh = tenkh;
-    }
-    public String getsdt(){
-        return sdt;}
-    public void setsdt(String sdt){
-        System.out.println("Nhap so dien thoai: ");
-        sdt = sc.nextLine();
-        this.sdt = sdt;
-    }
-    public String getdiachi(){
-        return diachi;}
-    public void setdiachi(String diachi){
-        System.out.println("Nhap dia chi: ");
-        diachi = sc.nextLine();
-        this.diachi = diachi;
-    }
-    public int getnamsinh(){
-        return namsinh;}
-    public void setnamsinh(int namsinh){
-        System.out.println("Nhap nam sinh: ");
-        namsinh = sc.nextInt();
-        this.namsinh = namsinh;
-    }
-    
-    public void input(){
-        setmakh(makh);
-        settenkh(tenkh);
-        setsdt(sdt);
-        setdiachi(diachi);
-        setnamsinh(namsinh);
-    }
-    public void output(){
-        System.out.printf("%-15s%-15s%-15s%-15s%-15s","Ma khach hang", "Ten khach hang", "So dien thoai","Dia chi", "Nam sinh" );
-        System.out.printf("%-15s%-15s%-15s%-15s%-15d", getmakh(),gettenkh(),getsdt(),getdiachi(),getnamsinh());
-        
-    
+public class KhachHang extends ConNguoi {
+    private String MaKH;
+    private int Dtinhluy;
 
-    
-}
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public KhachHang() {
+        super();
+        MaKH = null;
+        Dtinhluy = 0;
     }
-    
+
+    public KhachHang(KhachHang orther) {
+        this.Ten = orther.Ten;
+        this.NgaySinh = new date(orther.NgaySinh);
+        this.GioiTinh = orther.GioiTinh;
+        this.SDT = orther.SDT;
+        this.MaKH = orther.MaKH;
+        this.Dtinhluy = orther.Dtinhluy;
+    }
+
+    public void Nhap() {
+        setMaKH();
+        super.Nhap();
+        Dtinhluy = 0;
+    }
+
+    public void setMaKH(String maKH) {
+        this.MaKH = maKH;
+    }
+    public void setMaKH() {
+        System.out.print("Nhap ma khach hang: ");
+        setMaKH(input.nextLine());
+    }
+
+    public String getMaKH() {
+        return MaKH;
+    }
+
+    public void setDtinhluy(int dtinhluy) {
+        Dtinhluy = dtinhluy;
+    }
+    public void setDtinhluy() {
+        System.out.print("Nhap diem tich luy: ");
+        setDtinhluy(Integer.parseInt(input.nextLine()));
+    }
+
+    public int getDtinhluy() {
+        return Dtinhluy;
+    }
+
+    public void congDtichluy() {
+        Dtinhluy++;
+    }
+
+    public double GiamGia() {
+        if (Dtinhluy < 20) {
+            return 0;
+        } else {
+            if (Dtinhluy > 50) {
+                return 0.5;
+            } else {
+                float a = Dtinhluy;
+                return a / 100;
+            }
+        }
+    }
+
+    public static void Titile() {
+        System.out.println(
+                "+----------+------------------------------+------------+----------------------------------------+------------+---------------+");
+        System.out.print("|");
+        System.out.printf("%-10s", "Ma TV");
+        System.out.print("|");
+        System.out.printf("%-30s", "Ten thanh vien");
+        System.out.print("|");
+        System.out.printf("%-12s", "Ngay sinh");
+        System.out.print("|");
+        System.out.printf("%-40s", "Dia chi");
+        System.out.print("|");
+        System.out.printf("%-12s", "SDT");
+        System.out.print("|");
+        System.out.printf("%-15s", "Diem tich luy");
+        System.out.println("|");
+        System.out.println(
+                "+----------+------------------------------+------------+----------------------------------------+------------+---------------+");
+
+    }
+
+    public void xuatKH() {
+        System.out.print("|");
+        System.out.printf("%-10s", MaKH);
+        System.out.print("|");
+        System.out.printf("%-30s", Ten);
+        System.out.print("|");
+        System.out.printf("%-12s", getNgaySinh().toString());
+        System.out.print("|");
+        System.out.printf("%-40s", DiaChi);
+        System.out.print("|");
+        System.out.printf("%-12s", SDT);
+        System.out.print("|");
+        System.out.printf("%-15s", Dtinhluy);
+        System.out.println("|");
+    }
+
+    public void ToTable() {
+        Titile();
+        xuatKH();
+        System.out.println(
+                "+----------+------------------------------+------------+----------------------------------------+------------+---------------+");
+    }
+
+    public String toString() {
+        return MaKH + "," + getTen() + "," + getNgaySinh().toString() + "," + getDiaChi() + "," + getSDT() + ","
+                + Dtinhluy;
+    }
+
 }
