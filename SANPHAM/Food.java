@@ -1,19 +1,51 @@
 package SANPHAM;
 
 public class Food extends SanPham {
-    public Food(){
+    public Food() {
         super();
+        TheLoai = "Food";
     }
-    public Food(String MaSP,String TenSP,int GiaBan,int GiaNhap,int SoLuong){
-        super(MaSP, TenSP, GiaBan, GiaNhap, SoLuong);
+
+    public Food(String MaSP, String TenSP,String TheLoai, int GiaBan, int GiaNhap) {
+        super(MaSP, TenSP, TheLoai, GiaBan, GiaNhap);
     }
-    public void nhapSP(){
-        super.nhapSP();
+
+    public Food(Food orther) {
+        this.MaSP = orther.MaSP;
+        this.TenSP = orther.TenSP;
+        this.TheLoai = orther.TheLoai;
+        this.GiaBan = orther.GiaBan;
+        this.GiaNhap = orther.GiaNhap;
     }
-    public void xuatSP(){
-        super.xuatSP();
+
+    @Override
+    public void nhapSP() {
+        System.out.print("Nhap ma mon an(F___): ");
+        setMaSP(input.nextLine());
+        setTenSP();
+        setGiaBan();
+        setGiaNhap();
     }
-    public String toString(){
-       return this.MaSP+","+TenSP+","+GiaBan+","+GiaNhap+","+SoLuong+",Food";
+
+    @Override
+    public void setMaSP(String Masp) {
+        String ddf = "^F\\d{3}$";
+        boolean Inputtrue = false;
+        do {
+            if (super.checkMasp(ddf, Masp) == true) {
+                Inputtrue = true;
+                super.setMaSP(Masp);
+            } else {
+                System.out.println("Nhap sai moi nhap lai! ");
+                System.out.print("Nhap ma san pham(Food:F___,Drink:D___,Combo:C___): ");
+                Masp = input.nextLine();
+            }
+        } while (Inputtrue == false);
     }
+
+    @Override
+    public String toString() {
+        return MaSP + "," + TenSP + "," + GiaBan + "," + GiaNhap;
+    }
+    
 }

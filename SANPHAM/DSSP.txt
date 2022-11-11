@@ -1,2 +1,17 @@
-chứa thông tin sản phẩm, mỗi chuỗi chứ thông tin 1 nhân viên
-các thuộc tính ngắn cách nhau bởi dấu ','
+F001,Ga ran,50000,35000
+F002,Burger bo,48000,33000
+F003,Burger ga,45000,30000
+F004,Banh my thit,20000,12000
+F005,Salad tron,20000,10000
+F006,Khoai tay chien,15000,7000
+F007,Pizza xuc xich,140000,70000
+F008,Com ga,35000,20000
+D001,Coca Cola,12000,5000
+D002,Fanta,12000,5000
+D003,Seven Up,12000,4000
+D007,Pepsi,15000,7000
+D008,Tra dao,35000,15000
+F009,Ga chien nuoc mam,20000,12000
+F220,Trung tran,15000,4000
+C221,Combo 2 nguoi bao gom: #Ga ran#Khoai tay chien#Coca Cola,53900,47000
+C223,Com bo si me bao gom:#Burger bo#Salad tron#Pepsi,58100,50000
