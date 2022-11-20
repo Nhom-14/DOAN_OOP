@@ -1,2 +1,3 @@
-chứa thông tin nhân viên, mỗi chuỗi chứ thông tin 1 nhân viên
-các thuộc tính ngắn cách nhau bởi dấu ','
+T00002,Nguyen Ngoc Sang,21/8/2003,0,66 An Duong Vuong P16 Q8,0916921132,0,7,sang123456789
+M00002,Nguyen Ngoc Sang,21/8/2003,0,66 An Duong Vuong P16 Q8,0916921132,0,7,sang123456789
+P00002,Nguyen Ngoc Sang,21/8/2003,0,66 An Duong Vuong P16 Q8,0916921132,0,7,sang123456789

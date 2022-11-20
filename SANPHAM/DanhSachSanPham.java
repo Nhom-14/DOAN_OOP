@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import BASE.*;
+import DOANHTHU.DanhSachHoaDon;
+import DOANHTHU.DanhSachPhieuNhap;
+import KHACHHANG.KhachHang;
+import NHANVIEN.NhanVien;
 
 public class DanhSachSanPham implements DocGhiFile {
     private ArrayList<SanPham> sp;
@@ -40,37 +44,24 @@ public class DanhSachSanPham implements DocGhiFile {
                     String[] word = s.split(",");
                     if (word[0].charAt(0) == 'F') {
                         SanPham a = new Food();
-                        a.setMaSP(word[0]);
-                        a.setTheLoai("Food");
-                        a.setTenSP(word[1]);
-                        a.setGiaBan(Integer.parseInt(word[2]));
-                        a.setGiaNhap(Integer.parseInt(word[3]));
+                        a.TachTT(word);
                         sp.add(a);
                     } else if (word[0].charAt(0) == 'D') {
                         SanPham a = new Drink();
-                        a.setMaSP(word[0]);
-                        a.setTheLoai("Drink");
-                        a.setTenSP(word[1]);
-                        a.setGiaBan(Integer.parseInt(word[2]));
-                        a.setGiaNhap(Integer.parseInt(word[3]));
+                        a.TachTT(word);
                         sp.add(a);
-                    } else {
+                    } else if (word[0].charAt(0) == 'C') {
                         SanPham a = new Combo();
-                        a.setMaSP(word[0]);
-                        a.setTheLoai("Combo");
-                        String w[] = word[1].split("#");
-                        a.TachTen(w.length, w);
-                        a.setGiaBan(Integer.parseInt(word[2]));
-                        a.setGiaNhap(Integer.parseInt(word[3]));
-                        sp.add((SanPham) a);
+                        a.TachTT(word);
+                        sp.add(a);
                     }
                 }
             }
             brsp.close();
 
         } catch (Exception e) {
-            System.out.println("Loi doc File danh sach san pham!");
-            e.printStackTrace();
+            System.out.println("Loi doc File danh sach san pham: ");
+            System.out.println(e.toString());
         }
 
     }
@@ -85,8 +76,7 @@ public class DanhSachSanPham implements DocGhiFile {
             pw.flush();
             pw.close();
         } catch (Exception e) {
-            System.out.println("Loi ghi File danh sach san pham!");
-            e.printStackTrace();
+            System.out.println("Loi ghi File danh sach san pham: " + e.toString());
         }
     }
 
@@ -206,19 +196,16 @@ public class DanhSachSanPham implements DocGhiFile {
             case 1: {
                 System.out.println("Ket qua trung khop: ");
                 SearchSPbyTheLoai(choice).XuatSP();
-                ;
                 break;
             }
             case 2: {
                 System.out.println("Ket qua trung khop: ");
                 SearchSPbyTheLoai(choice).XuatSP();
-                ;
                 break;
             }
             case 3: {
                 System.out.println("Ket qua trung khop: ");
                 SearchSPbyTheLoai(choice).XuatSP();
-                ;
                 break;
             }
         }
@@ -281,9 +268,9 @@ public class DanhSachSanPham implements DocGhiFile {
     public void TimKiembyGiaBan() {
         System.out.println("Nhap khoang gia muon tim: ");
         System.out.print("Tu: ");
-        int start = Integer.parseInt(input.nextLine());
+        double start = Double.parseDouble(input.nextLine());
         System.out.print("Den: ");
-        int end = Integer.parseInt(input.nextLine());
+        double end = Double.parseDouble(input.nextLine());
         DanhSachSanPham s = new DanhSachSanPham(SearchByGiaBan(start, end).sp);
         if (s.sp.size() == 0) {
             System.out.println("Khong tim thay ket qua.");
@@ -295,7 +282,7 @@ public class DanhSachSanPham implements DocGhiFile {
         input.nextLine();
     }
 
-    public DanhSachSanPham SearchByGiaBan(int start, int end) {
+    public DanhSachSanPham SearchByGiaBan(double start, double end) {
         DanhSachSanPham a = new DanhSachSanPham();
         for (int i = 0; i < sp.size(); i++) {
             if (sp.get(i).getGiaBan() >= start && sp.get(i).getGiaBan() <= end) {
@@ -308,10 +295,10 @@ public class DanhSachSanPham implements DocGhiFile {
     public void TimKiembyGiaNhap() {
         System.out.println("Nhap khoang gia muon tim: ");
         System.out.print("Tu: ");
-        int start = Integer.parseInt(input.nextLine());
+        double start = Double.parseDouble(input.nextLine());
         System.out.print("Den: ");
-        int end = Integer.parseInt(input.nextLine());
-        DanhSachSanPham s = new DanhSachSanPham(SearchByGiaBan(start, end).sp);
+        double end = Double.parseDouble(input.nextLine());
+        DanhSachSanPham s = new DanhSachSanPham(SearchByGiaNhap(start, end).sp);
         if (s.sp.size() == 0) {
             System.out.println("Khong tim thay ket qua.");
         } else {
@@ -323,7 +310,7 @@ public class DanhSachSanPham implements DocGhiFile {
 
     }
 
-    public DanhSachSanPham SearchByGiaNhap(int start, int end) {
+    public DanhSachSanPham SearchByGiaNhap(double start, double end) {
         DanhSachSanPham a = new DanhSachSanPham();
         for (int i = 0; i < sp.size(); i++) {
             if (sp.get(i).getGiaNhap() >= start && sp.get(i).getGiaNhap() <= end) {
@@ -459,16 +446,58 @@ public class DanhSachSanPham implements DocGhiFile {
         }
     }
 
-    public void NhapHang() {
-        do{
-            System.out.print("Ma san pham muon nhap them: ");
-            String m = input.nextLine();
-            SearchByMaSP(m).toTable();
-            System.out.print("So luong muon nhap them la: ");
-            int sl = Integer.parseInt(input.nextLine());
-            SearchByMaSP(m).setSoLuong(sl + SearchByMaSP(m).getSoLuong());
-            System.out.print("Nhan bat ki de tiep tuc, nhan 't' de thoat: ");
-        } while (input.nextLine().charAt(0) != 't');
+
+    public void titleMenu() {
+        System.out.print("|");
+        System.out.printf("%-8s", "Ma mon");
+        System.out.printf("%-30s", "Ten mon");
+        System.out.printf("%10s", "Gia");
+        System.out.printf("%10s", "So luong");
+        System.out.println("|");
+        System.out.println("+----------------------------------------------------------+");
+    }
+
+    public void menu() {
+        System.out.println("");
+        System.out.println("+----------------------------------------------------------+");
+        System.out.println("|                          MENU                            |");
+        System.out.println("+----------------------------------------------------------+");
+        System.out.println("|Mon an                                                    |");
+        System.out.println("+----------------------------------------------------------+");
+        titleMenu();
+        for (SanPham a : sp) {
+            if(a instanceof Food) {
+                a.xuatMenu();
+            }
+        }
+        System.out.println("|Thuc uong                                                 |");
+        System.out.println("+----------------------------------------------------------+");
+        titleMenu();
+        for (SanPham a : sp) {
+            if(a instanceof Drink) {
+                a.xuatMenu();
+            }
+        }
+        System.out.println("|Com bo                                                    |");
+        System.out.println("+----------------------------------------------------------+");
+        titleMenu();
+        for (SanPham a : sp) {
+            if(a instanceof Combo) {
+                Combo b = new Combo();
+                b = (Combo) a;
+                b.xuatMenu();
+            }
+        }
+
+    }
+
+    public void NhapHang(NhanVien a, DanhSachPhieuNhap b, DanhSachSanPham dssp_Main) {
+        b.themPhieuNhap(a, dssp_Main);
+    }
+
+    public void BanHang(NhanVien a, KhachHang c, DanhSachHoaDon b, DanhSachSanPham dssp_Main) {
+        menu();
+        b.themHoaDon(a, c, dssp_Main);
     }
 
 }

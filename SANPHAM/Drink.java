@@ -6,8 +6,8 @@ public class Drink extends SanPham {
         TheLoai = "Drink";
     }
 
-    public Drink(String MaSP, String TenSP,String TheLoai, int GiaBan, int GiaNhap) {
-        super(MaSP, TenSP,TheLoai, GiaBan, GiaNhap);
+    public Drink(String MaSP, String TenSP, String TheLoai, int GiaBan, int GiaNhap) {
+        super(MaSP, TenSP, TheLoai, GiaBan, GiaNhap);
     }
 
     public Drink(Drink orther) {
@@ -46,5 +46,13 @@ public class Drink extends SanPham {
     public String toString() {
         return MaSP + "," + TenSP + "," + GiaBan + "," + GiaNhap;
     }
-    
+
+    @Override
+    public void TachTT(String[] word) {
+        setMaSP(word[0]);
+        setTheLoai("Drink");
+        setTenSP(word[1]);
+        setGiaBan(Double.parseDouble(word[2]));
+        setGiaNhap(Double.parseDouble(word[3]));
+    }
 }

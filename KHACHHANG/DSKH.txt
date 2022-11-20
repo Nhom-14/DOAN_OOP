@@ -1,2 +1,7 @@
-chứa thông tin khách hàng, mỗi chuỗi chứ thông tin 1 nhân viên
-các thuộc tính ngắn cách nhau bởi dấu ','
+002,Nguyen Ngoc Sang,21/8/2003,66 An Duong Vuong P16 Q8 TpHCM,0916921132,10
+003,Nguyen Ngoc Sang,21/8/2003,66 An Duong Vuong P16 Q8 TpHCM,0916921132,10
+005,Nguyen Ngoc Sang,21/8/2003,66 An Duong Vuong P16 Q8 TpHCM,0916921132,10
+022,Nguyen Ngoc Sang,21/8/2003,66 An Duong Vuong P16 Q8 TpHCM,0916921132,10
+066,Nguyen Ngoc Sang,21/8/2003,66 An Duong Vuong P16 Q8 TpHCM,0916921132,10
+134,Nguyen Ngoc Sang,21/8/2003,66 An Duong Vuong P16 Q8 TpHCM,0916921132,10
+980,Nguyen Ngoc Sang,21/8/2003,66 An Duong Vuong P16 Q8 TpHCM,0916921132,10

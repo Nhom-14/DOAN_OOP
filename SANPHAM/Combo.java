@@ -5,7 +5,7 @@ public class Combo extends SanPham {
     private int n;
 
     public Combo() {
-        this.arrSP = null;
+        this.arrSP = new String[n];
         this.n = 0;
         TheLoai = "Combo";
     }
@@ -13,6 +13,15 @@ public class Combo extends SanPham {
     public Combo(String arrSP[], int n) {
         this.arrSP = arrSP;
         this.n = n;
+    }
+
+    public Combo(Combo orther) {
+        super(orther.MaSP, orther.TenSP, orther.TheLoai, orther.GiaBan, orther.GiaNhap);
+        this.n = orther.n;
+        this.arrSP = new String[n];
+        for (int i = 0; i < this.n; i++) {
+            this.arrSP[i] = orther.arrSP[i];
+        }
     }
 
     public int getN() {
@@ -131,6 +140,25 @@ public class Combo extends SanPham {
     }
 
     @Override
+    public void xuatMenu() {
+        System.out.print("|");
+        System.out.printf("%-8s", MaSP);
+        System.out.printf("%-30s", TenSP);
+        System.out.printf("%10s", GiaBan);
+        System.out.printf("%10s", SoLuong);
+        System.out.println("|");
+        for (int i = 0; i < arrSP.length; i++) {
+            System.out.print("|");
+            System.out.printf("%-8s", "");
+            System.out.printf("%-30s", arrSP[i]);
+            System.out.printf("%10s", "");
+            System.out.printf("%10s", "");
+            System.out.println("|");
+        }
+        System.out.println("+----------------------------------------------------------+");
+    }
+
+    @Override
     public String toString() {
         String s = MaSP + "," + TenSP;
         for (int i = 0; i < n; i++) {
@@ -138,5 +166,15 @@ public class Combo extends SanPham {
         }
         s = s + "," + GiaBan + "," + GiaNhap;
         return s;
+    }
+
+    @Override
+    public void TachTT(String[] word) {
+        setMaSP(word[0]);
+        setTheLoai("Combo");
+        String w[] = word[1].split("#");
+        TachTen(w.length, w);
+        setGiaBan(Double.parseDouble(word[2]));
+        setGiaNhap(Double.parseDouble(word[3]));
     }
 }

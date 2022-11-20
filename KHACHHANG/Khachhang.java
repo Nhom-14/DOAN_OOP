@@ -24,6 +24,7 @@ public class KhachHang extends ConNguoi {
         this.Dtinhluy = orther.Dtinhluy;
     }
 
+    @Override
     public void Nhap() {
         setMaKH();
         super.Nhap();
@@ -33,11 +34,12 @@ public class KhachHang extends ConNguoi {
     public void setMaKH(String maKH) {
         this.MaKH = maKH;
     }
+
     public void setMaKH() {
         String ddmkh = "^\\d{3}$";
         boolean check = false;
         do {
-            System.out.print("Nhap ma khach hang(3 chu so): ");
+            System.out.print("Nhap ma khach hang (1 so co 3 chu so): ");
             String mkh = input.nextLine();
             Pattern pattern = Pattern.compile(ddmkh);
             Matcher matcher;
@@ -58,6 +60,7 @@ public class KhachHang extends ConNguoi {
     public void setDtinhluy(int dtinhluy) {
         Dtinhluy = dtinhluy;
     }
+
     public void setDtinhluy() {
         System.out.print("Nhap diem tich luy: ");
         setDtinhluy(Integer.parseInt(input.nextLine()));

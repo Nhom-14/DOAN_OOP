@@ -1,3 +1,5 @@
+package NHANVIEN;
+
 import java.util.Scanner;
 
 public class Account {
@@ -20,20 +22,24 @@ public class Account {
         return userName;
     }
     public void setUserName(String userName) {
-        System.out.println("Username: ");
-        userName = scn.nextLine();
         this.userName = userName;
+    }
+    public void setUserName() {
+        System.out.println("Username: ");
+        setUserName(scn.nextLine());
     }
 
     public String getPassword() {
         return password;
     }
-
-    public void setPassword(String password) {
-        System.out.println("Password: ");
-        password = scn.nextLine();
-        this.password = password;
+    public void setPassword(String pass) {
+        this.password = pass;
     }
+    public void setPassword() {
+        System.out.println("Password: ");
+        setPassword(scn.nextLine());
+    }
+    
 
     public int getAccess() {
         return access;
@@ -43,8 +49,7 @@ public class Account {
     }
     public void NhapTK()
     {
-        setUserName(userName);
-        setPassword(password);
+        setUserName();
+        setPassword();
     }
 }
-

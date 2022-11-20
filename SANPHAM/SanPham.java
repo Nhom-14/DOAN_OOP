@@ -8,8 +8,8 @@ public abstract class SanPham {
     protected String MaSP;
     protected String TenSP;
     protected String TheLoai;
-    protected int GiaBan;
-    protected int GiaNhap;
+    protected double GiaBan;
+    protected double GiaNhap;
     protected int SoLuong;
     static Scanner input = new Scanner(System.in);
 
@@ -22,7 +22,7 @@ public abstract class SanPham {
         this.SoLuong = 50;
     }
 
-    public SanPham(String MaSP, String TenSP,String TheLoai, int GiaBan, int GiaNhap) {
+    public SanPham(String MaSP, String TenSP, String TheLoai, double GiaBan, double GiaNhap) {
         this.MaSP = MaSP;
         this.TenSP = TenSP;
         this.TheLoai = TheLoai;
@@ -54,6 +54,7 @@ public abstract class SanPham {
     public void setTenSP(String Tensp) {
         this.TenSP = Tensp;
     }
+
     public void setTenSP() {
         System.out.print("Nhap ten san pham: ");
         TenSP = input.nextLine();
@@ -62,32 +63,35 @@ public abstract class SanPham {
     public void setTheLoai(String theLoai) {
         TheLoai = theLoai;
     }
+
     public String getTheLoai() {
         return TheLoai;
     }
 
-    public int getGiaBan() {
+    public double getGiaBan() {
         return GiaBan;
     }
 
-    public void setGiaBan(int Giaban) {
+    public void setGiaBan(double Giaban) {
         this.GiaBan = Giaban;
     }
+
     public void setGiaBan() {
         System.out.print("Nhap gia ban: ");
-        GiaBan = Integer.parseInt(input.nextLine());
+        GiaBan = Double.parseDouble(input.nextLine());
     }
 
-    public int getGiaNhap() {
+    public double getGiaNhap() {
         return GiaNhap;
     }
 
-    public void setGiaNhap(int Gianhap) {
+    public void setGiaNhap(double Gianhap) {
         this.GiaNhap = Gianhap;
     }
+
     public void setGiaNhap() {
         System.out.print("Nhap gia nhap: ");
-        GiaNhap= Integer.parseInt(input.nextLine());
+        GiaNhap = Double.parseDouble(input.nextLine());
     }
 
     public int getSoLuong() {
@@ -111,9 +115,7 @@ public abstract class SanPham {
         }
     }
 
-    public void TachTen(int n,String[] w) {
-
-    }
+    public abstract void TachTT(String[] word);
 
     public void xuatSP() {
         System.out.print("|");
@@ -148,6 +150,17 @@ public abstract class SanPham {
         System.out.print("|\n");
         System.out.println("+--------+----------+------------------------------+----------+----------+----------+");
     }
+
+    public void xuatMenu() {
+        System.out.print("|");
+        System.out.printf("%-8s", MaSP);
+        System.out.printf("%-30s", TenSP);
+        System.out.printf("%10s", GiaBan);
+        System.out.printf("%10s", SoLuong);
+        System.out.println("|");
+        System.out.println("+----------------------------------------------------------+");
+    }
+
 
     public void toTable() {
         Title();

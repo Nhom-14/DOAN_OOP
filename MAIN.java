@@ -1,17 +1,37 @@
 import java.util.Scanner;
 
-import KHACHHANG.*;
-import SANPHAM.*;
+import DOANHTHU.DanhSachHoaDon;
+import DOANHTHU.DanhSachPhieuNhap;
+import KHACHHANG.DanhSachKhachHang;
+import NHANVIEN.DanhSachNhanVien;
+import NHANVIEN.NhanVien;
+import SANPHAM.DanhSachSanPham;
 
 public class MAIN {
-    static Scanner input = new Scanner(System.in);
-    static DanhSachSanPham DSSP = new DanhSachSanPham();
-    static DanhSachKhachHang DSKH = new DanhSachKhachHang();
+    private static Scanner input = new Scanner(System.in);
+    private static DanhSachSanPham DSSP;
+    private static DanhSachKhachHang DSKH;
+    private static DanhSachNhanVien DSNV;
+    private static DanhSachPhieuNhap DSPN;
+    private static DanhSachHoaDon DSHD;
 
     public static void main(String[] args) {
-
+        
+        DSSP = new DanhSachSanPham();
         DSSP.DocFile();
+
+        DSKH = new DanhSachKhachHang();
         DSKH.DocFile();
+
+        DSNV = new DanhSachNhanVien();
+        DSNV.DocFile();
+
+        DSPN = new DanhSachPhieuNhap(DSSP, DSNV);
+        DSPN.DocFile();
+
+        DSHD = new DanhSachHoaDon(DSKH, DSSP, DSNV);
+        DSHD.DocFile();
+
         int opt;
         do {
             System.out.println("");
@@ -35,17 +55,81 @@ public class MAIN {
 
             switch (opt) {
                 case 1: {
-                    QuanlySP();
+                    System.out.println("Dang nhap tai khoan nhan vien: ");
+                    System.out.print("ID nhan vien: ");
+                    String id = input.nextLine();
+                    System.out.print("Password: ");
+                    String pass = input.nextLine();
+                    if(DSNV.dangNhap(id, pass) != null) {
+                        QuanLySP(DSNV.dangNhap(id, pass));
+                    } else {
+                        System.out.println("Khong tim thay tai khoan.");
+                        System.out.print("Nhan phim bat ki de quay lai.");
+                        input.nextLine();
+                    }
                     break;
                 }
 
                 case 2: {
-                    System.out.println("Quan ly nhan vien");
+                    System.out.println("Dang nhap tai khoan nhan vien: ");
+                    System.out.print("ID nhan vien: ");
+                    String id = input.nextLine();
+                    System.out.print("Password: ");
+                    String pass = input.nextLine();
+                    if(DSNV.dangNhap(id, pass) != null) {
+                        if(id.charAt(0) == 'M') {
+                            QuanLyNV(DSNV.dangNhap(id, pass));
+                        }
+                        else {
+                            System.out.println("Khong du quyen de su dung chuc nang nay.");
+                        }
+                    } else {
+                        System.out.println("Khong tim thay tai khoan.");
+                        System.out.print("Nhan phim bat ki de tiep tuc.");
+                        input.nextLine();
+                    }
                     break;
                 }
 
                 case 3: {
-                    System.out.println("Ban hang");
+                    System.out.println("Dang nhap tai khoan nhan vien: ");
+                    System.out.print("ID nhan vien: ");
+                    String id = input.nextLine();
+                    System.out.print("Password: ");
+                    String pass = input.nextLine();
+                    if(DSNV.dangNhap(id, pass) != null) {
+                        System.out.print("Co muon ghi thong tin khach hang?(0;1): ");
+                        int k = Integer.parseInt(input.nextLine());
+                        if(k==0) {
+                            DSSP.BanHang(DSNV.dangNhap(id, pass), null, DSHD,DSSP);
+                        } else {
+                            String mkh;
+                            boolean again = false;
+                            do{
+                                System.out.print("Nhap ma khach hang: ");
+                                mkh = input.nextLine();
+                                if(DSKH.SearchKH(mkh) == null) {
+                                    System.out.println("Khong tim thay khach hang.");
+                                    System.out.print("1(Nhap lai);0(Bo qua): ");
+                                    int opt2 = Integer.parseInt(input.nextLine());
+                                    if(opt2 == 1) {
+                                        again = true;
+                                    } else {
+                                        again = false;
+                                        DSSP.BanHang(DSNV.dangNhap(id, pass), null, DSHD,DSSP);
+                                    }
+                                } else {
+                                    again = false;
+                                    DSSP.BanHang(DSNV.dangNhap(id, pass), DSKH.SearchKH(mkh), DSHD,DSSP);
+                                }
+                            } while (again == true);
+                            
+                        }
+                    } else {
+                        System.out.println("Khong tim thay tai khoan.");
+                    }
+                    System.out.print("Nhan phim bat ki de tiep tuc.");
+                    input.nextLine();
                     break;
                 }
 
@@ -55,7 +139,23 @@ public class MAIN {
                 }
 
                 case 5: {
-                    System.out.println("Quan ly doanh thu");
+                    System.out.println("Dang nhap tai khoan nhan vien: ");
+                    System.out.print("ID nhan vien: ");
+                    String id = input.nextLine();
+                    System.out.print("Password: ");
+                    String pass = input.nextLine();
+                    if(DSNV.dangNhap(id, pass) != null) {
+                        if(id.charAt(0) == 'M') {
+                            QuanLyDT();
+                        }
+                        else {
+                            System.out.println("Khong du quyen de su dung chuc nang nay.");
+                        }
+                    } else {
+                        System.out.println("Khong tim thay tai khoan.");
+                        System.out.print("Nhan phim bat ki de tiep tuc.");
+                        input.nextLine();
+                    }
                     break;
                 }
 
@@ -69,7 +169,7 @@ public class MAIN {
 
     }
 
-    public static void QuanlySP() {
+    public static void QuanLySP(NhanVien a) {
         int choice;
         do {
             System.out.println("");
@@ -120,7 +220,7 @@ public class MAIN {
                 }
 
                 case 6: {
-                    DSSP.NhapHang();
+                    DSSP.NhapHang(a,DSPN,DSSP);
                     break;
                 }
 
@@ -133,7 +233,7 @@ public class MAIN {
         } while (choice != 0);
     }
 
-    public static void QuanLyNV() {
+    public static void QuanLyNV(NhanVien a) {
         int choice;
         do{
             System.out.println("");
@@ -142,9 +242,9 @@ public class MAIN {
             System.out.println("+---------------------------------------+");
             System.out.println("|1. Xuat danh sach nhan vien.           |");
             System.out.println("|2. Them nhan vien.                     |");
-            System.out.println("|3. Tim kiem nhan vien.                 |");
-            System.out.println("|4. Sua thong tin nhan vien.            |");
-            System.out.println("|5. Xoa nhan vien.                      |");
+            System.out.println("|3. Sua thong tin nhan vien.            |");
+            System.out.println("|4. Xoa nhan vien.                      |");
+            System.out.println("|5. Tim kiem nhan vien.                 |");
             System.out.println("|6. Cham cong nhan vien                 |");
             System.out.println("|0. Tro ve menu chinh.                  |");
             System.out.println("+---------------------------------------+");
@@ -158,26 +258,36 @@ public class MAIN {
 
             switch (choice) {
                 case 1: {
+                    DSNV.XuatNV();
+                    System.out.print("Nhan phim bat ki de tiep tuc.");
+                    input.nextLine();
                     break;
                 }
 
                 case 2: {
+                    DSNV.ThemNV();
                     break;
                 }
 
                 case 3: {
+                    DSNV.SuaNV();
                     break;
                 }
 
                 case 4: {
+                    DSNV.XoaNV();
                     break;
                 }
 
                 case 5: {
+                    DSNV.LocNV();
                     break;
                 }
 
                 case 6: {
+                    DSNV.BangLuong();
+                    System.out.print("Nhan phim bat ki de tiep tuc.");
+                    input.nextLine();
                     break;
                 }
 
@@ -242,6 +352,43 @@ public class MAIN {
                     System.out.print("Nhan phim bat ki de tiep tuc.");
                     input.nextLine();
                     System.out.println("");
+                    break;
+                }
+
+                case 0: {
+                    break;
+                }
+            }
+        } while (choice != 0);
+    }
+
+    public static void QuanLyDT() {
+        int choice;
+        do{
+            System.out.println("");
+            System.out.println("+---------------------------------------+");
+            System.out.println("|            QUAN LY DOANH THU          |");
+            System.out.println("+---------------------------------------+");
+            System.out.println("|1. Lich su phieu nhap                  |");
+            System.out.println("|2. Lich su hoa don                     |");
+            System.out.println("|0. Tro ve menu chinh.                  |");
+            System.out.println("+---------------------------------------+");
+            do {
+                System.out.print("Moi nhap lua chon: ");
+                choice = Integer.parseInt(input.nextLine());
+                if (choice < 0 || choice > 2) {
+                    System.out.println("Lua chon khong hop le, moi nhap lai!");
+                }
+            } while (choice > 2 || choice < 0);
+
+            switch(choice) {
+                case 1: {
+                    DSPN.xemPhieuNhap();
+                    break;
+                }
+
+                case 2: {
+                    DSHD.xemHoaDon();
                     break;
                 }
 

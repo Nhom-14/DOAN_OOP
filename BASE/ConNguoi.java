@@ -38,6 +38,7 @@ public class ConNguoi {
     public void setTen(String ten) {
         this.Ten = ten;
     }
+
     public void setTen() {
         System.out.print("Ten: ");
         setTen(input.nextLine());
@@ -50,6 +51,7 @@ public class ConNguoi {
     public void setNgaySinh(date ngaySinh) {
         NgaySinh = ngaySinh;
     }
+
     public void setNgaySinh() {
         System.out.println("Ngay sinh: ");
         NgaySinh.NhapDate();
@@ -62,18 +64,24 @@ public class ConNguoi {
     public void setDiaChi(String diaChi) {
         DiaChi = diaChi;
     }
+
     public void setDiaChi() {
         System.out.print("Nhap dia chi: ");
-       setDiaChi(input.nextLine());
+        setDiaChi(input.nextLine());
     }
 
     public String getDiaChi() {
         return DiaChi;
     }
 
-    public void setGioiTinh(boolean gioiTinh) {
-        GioiTinh = gioiTinh;
+    public void setGioiTinh(int gt) {
+        if (gt == 1) {
+            GioiTinh = true;
+        } else {
+            GioiTinh = false;
+        }
     }
+
     public void setGioiTinh() {
         System.out.print("Gioi tinh (Nam[0], Nu[1]): ");
         int c = Integer.parseInt(input.nextLine());
@@ -87,6 +95,7 @@ public class ConNguoi {
     public void setSDT(String sDT) {
         SDT = sDT;
     }
+
     public void setSDT() {
         System.out.print("So dien thoai: ");
         checkSDT(input.nextLine());
@@ -99,13 +108,11 @@ public class ConNguoi {
     public void checkGioiTinh(int c) {
         int soLanLam = 1;
         do {
-            if(soLanLam > 1) {
+            if (soLanLam > 1) {
                 c = Integer.parseInt(input.nextLine());
             }
-            if (c == 0) {
-                setGioiTinh(false);
-            } else if (c == 1) {
-                setGioiTinh(true);
+            if (c == 0 || c == 1) {
+                setGioiTinh(c);
             } else {
                 System.out.println("Nhap sai, moi nhap lai!");
                 System.out.print("Gioi tinh (Nam[0], Nu[1]): ");
@@ -141,6 +148,5 @@ public class ConNguoi {
         setDiaChi();
         setSDT();
     }
-
 
 }

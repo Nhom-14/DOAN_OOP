@@ -26,6 +26,7 @@ public class DanhSachKhachHang implements DocGhiFile {
         return KHlist;
     }
 
+    @Override
     public void DocFile() {
         File fkh = new File(tenFILE);
         try {
@@ -51,12 +52,13 @@ public class DanhSachKhachHang implements DocGhiFile {
             }
             brkh.close();
         } catch (Exception e) {
-            System.out.println("Loi doc File danh sach Khach hang!");
-            e.printStackTrace();
+            System.out.println("Loi doc File danh sach Khach hang: ");
+            System.out.println(e.toString());
         }
 
     }
 
+    @Override
     public void GhiFile() {
         try {
             PrintWriter pw = new PrintWriter(tenFILE);
