@@ -19,16 +19,16 @@ public abstract class SanPham {
         this.TheLoai = "";
         this.GiaBan = 0;
         this.GiaNhap = 0;
-        this.SoLuong = 50;
+        this.SoLuong = 0;
     }
 
-    public SanPham(String MaSP, String TenSP, String TheLoai, double GiaBan, double GiaNhap) {
+    public SanPham(String MaSP, String TenSP, String TheLoai, double GiaBan, double GiaNhap,int SoLuong) {
         this.MaSP = MaSP;
         this.TenSP = TenSP;
         this.TheLoai = TheLoai;
         this.GiaBan = GiaBan;
         this.GiaNhap = GiaNhap;
-        this.SoLuong = 50;
+        this.SoLuong = SoLuong;
     }
 
     public SanPham(SanPham orther) {
@@ -37,6 +37,7 @@ public abstract class SanPham {
         this.TheLoai = orther.TheLoai;
         this.GiaBan = orther.GiaBan;
         this.GiaNhap = orther.GiaNhap;
+        this.SoLuong = orther.SoLuong;
     }
 
     public String getMaSP() {

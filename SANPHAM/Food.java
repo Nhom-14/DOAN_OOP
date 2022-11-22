@@ -6,8 +6,8 @@ public class Food extends SanPham {
         TheLoai = "Food";
     }
 
-    public Food(String MaSP, String TenSP, String TheLoai, int GiaBan, int GiaNhap) {
-        super(MaSP, TenSP, TheLoai, GiaBan, GiaNhap);
+    public Food(String MaSP, String TenSP, String TheLoai, int GiaBan, int GiaNhap,int SoLuong) {
+        super(MaSP, TenSP, TheLoai, GiaBan, GiaNhap, SoLuong);
     }
 
     public Food(Food orther) {
@@ -16,6 +16,7 @@ public class Food extends SanPham {
         this.TheLoai = orther.TheLoai;
         this.GiaBan = orther.GiaBan;
         this.GiaNhap = orther.GiaNhap;
+        this.SoLuong = orther.SoLuong;
     }
 
     @Override
@@ -45,7 +46,7 @@ public class Food extends SanPham {
 
     @Override
     public String toString() {
-        return MaSP + "," + TenSP + "," + GiaBan + "," + GiaNhap;
+        return MaSP + "," + TenSP + "," + GiaBan + "," + GiaNhap + "," + SoLuong;
     }
 
     @Override
@@ -55,7 +56,7 @@ public class Food extends SanPham {
         setTenSP(word[1]);
         setGiaBan(Double.parseDouble(word[2]));
         setGiaNhap(Double.parseDouble(word[3]));
-
+        setSoLuong(Integer.parseInt(word[4]));
     }
 
 }

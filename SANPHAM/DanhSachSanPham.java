@@ -324,13 +324,16 @@ public class DanhSachSanPham implements DocGhiFile {
         int choice;
         do {
             System.out.println("");
-            System.out.println("Chon tieu chi de loc: \n" +
-                    "1. Ma san pham \n" +
-                    "2. The loai \n" +
-                    "3. Ten san pham \n" +
-                    "4. Gia ban \n" +
-                    "5. Gia Nhap \n" +
-                    "0. Thoat");
+            System.out.println("+---------------------------------------+");
+            System.out.println("|         Chon tieu chi de loc:         |\n" +
+                    "+---------------------------------------+\n"+
+                    "|1. Ma san pham                         |\n" +
+                    "|2. The loai                            |\n" +
+                    "|3. Ten san pham                        |\n" +
+                    "|4. Gia ban                             |\n" +
+                    "|5. Gia Nhap                            |\n" +
+                    "|0. Thoat                               |\n" +
+                    "+---------------------------------------+");
             do {
                 System.out.print("Moi nhap lua chon: ");
                 choice = Integer.parseInt(input.nextLine());

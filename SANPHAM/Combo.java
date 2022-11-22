@@ -16,7 +16,7 @@ public class Combo extends SanPham {
     }
 
     public Combo(Combo orther) {
-        super(orther.MaSP, orther.TenSP, orther.TheLoai, orther.GiaBan, orther.GiaNhap);
+        super(orther.MaSP, orther.TenSP, orther.TheLoai, orther.GiaBan, orther.GiaNhap, orther.SoLuong);
         this.n = orther.n;
         this.arrSP = new String[n];
         for (int i = 0; i < this.n; i++) {
@@ -164,7 +164,7 @@ public class Combo extends SanPham {
         for (int i = 0; i < n; i++) {
             s = s + "#" + arrSP[i];
         }
-        s = s + "," + GiaBan + "," + GiaNhap;
+        s = s + "," + GiaBan + "," + GiaNhap + "," + SoLuong;
         return s;
     }
 
@@ -176,5 +176,6 @@ public class Combo extends SanPham {
         TachTen(w.length, w);
         setGiaBan(Double.parseDouble(word[2]));
         setGiaNhap(Double.parseDouble(word[3]));
+        setSoLuong(Integer.parseInt(word[4]));
     }
 }
