@@ -1,5 +1,7 @@
 package SANPHAM;
 
+import BASE.error;
+
 public class Combo extends SanPham {
     String[] arrSP;
     private int n;
@@ -16,7 +18,7 @@ public class Combo extends SanPham {
     }
 
     public Combo(Combo orther) {
-        super(orther.MaSP, orther.TenSP, orther.TheLoai, orther.GiaBan, orther.GiaNhap, orther.SoLuong);
+        super(orther.MaSP, orther.TenSP, orther.TheLoai, orther.GiaBan, orther.GiaNhap);
         this.n = orther.n;
         this.arrSP = new String[n];
         for (int i = 0; i < this.n; i++) {
@@ -36,30 +38,42 @@ public class Combo extends SanPham {
         return arrSP;
     }
 
-    public void setMaSP(String Masp) {
-        String ddf = "^C\\d{3}$";
-        boolean Inputtrue = false;
-        do {
-            if (super.checkMasp(ddf, Masp) == true) {
-                Inputtrue = true;
-                super.setMaSP(Masp);
-            } else {
-                System.out.println("Nhap sai moi nhap lai! ");
-                System.out.print("Nhap ma san pham(Food:F___,Drink:D___,Combo:C___): ");
-                Masp = input.nextLine();
-            }
-        } while (Inputtrue == false);
-    }
-
     @Override
-    public void nhapSP() {
-        System.out.print("Nhap ma Combo(C___): ");
-        setMaSP(input.nextLine());
-        System.out.print("Nhap ten Combo: ");
-        setTenSP(input.nextLine() + " bao gom:");
-        System.out.print("Nhap so luong san pham trong combo: ");
-        setN(Integer.parseInt(input.nextLine()));
+    public void nhapSP(String msp) {
+        setMaSP(msp);
+        while (true) {
+            System.out.print("Nhap ten Combo: ");
+            String t = input.nextLine();
+            if(error.checkKiTu(t)) {
+                setTenSP(input.nextLine() + " bao gom:");
+                break;
+            } else {
+                System.out.println("Khong hop le, khong duoc chua ki tu dac biet.");
+            }
+        }
+        while (true) {
+            System.out.print("Nhap so luong san pham trong combo: ");
+            int n1 = error.inputIntNumberError(input.nextLine());
+            if(n1 < 0) {
+                System.out.println("Khong hop le, khong duoc chua ki tu dac biet.");
+            } else {
+                setN(n1);
+                break;
+            }
+        }
         arrSP = new String[n];
+        for(int i=0;i<n;i++) {
+            while (true) {
+                System.out.print("Nhap ten : ");
+                String t = input.nextLine();
+                if(error.checkKiTu(t)) {
+                    arrSP[i] = t;
+                    break;
+                } else {
+                    System.out.println("Khong hop le, khong duoc chua ki tu dac biet.");
+                }
+            }
+        }
         setGiaBan();
         setGiaNhap();
     }

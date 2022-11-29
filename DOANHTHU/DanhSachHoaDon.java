@@ -4,30 +4,47 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 import BASE.DocGhiFile;
+import BASE.error;
 import KHACHHANG.DanhSachKhachHang;
-import KHACHHANG.KhachHang;
 import NHANVIEN.DanhSachNhanVien;
 import NHANVIEN.NhanVien;
 import SANPHAM.DanhSachSanPham;
 
 public class DanhSachHoaDon implements DocGhiFile {
-    private ArrayList<HoaDon> HDlist;
+    private HoaDon[] HDlist;
+    private int n;
     private DanhSachSanPham DSSP;
     private DanhSachNhanVien DSNV;
     private DanhSachKhachHang DSKH;
     static Scanner input = new Scanner(System.in);
     private String tenFile = "DOANHTHU/DSHD.txt";
 
+    public DanhSachHoaDon() {
+        DSKH = new DanhSachKhachHang();
+        DSSP = new DanhSachSanPham();
+        DSNV = new DanhSachNhanVien();
+        HDlist = new HoaDon[100];
+        n = 0;
+    }
+
     public DanhSachHoaDon(DanhSachKhachHang a, DanhSachSanPham b, DanhSachNhanVien c) {
         DSKH = new DanhSachKhachHang(a.getKHlist());
         DSSP = new DanhSachSanPham(b.getSp());
         DSNV = new DanhSachNhanVien(c.getNVList());
-        HDlist = new ArrayList<HoaDon>();
+        HDlist = new HoaDon[100];
+        n = 0;
+    }
+
+    public DanhSachHoaDon(DanhSachHoaDon orther) {
+        this.DSKH = orther.DSKH;
+        this.DSNV = orther.DSNV;
+        this.DSSP = orther.DSSP;
+        this.HDlist = orther.HDlist;
+        this.n = orther.n;
     }
 
     public void DocFile() {
@@ -42,7 +59,7 @@ public class DanhSachHoaDon implements DocGhiFile {
                 } else {
                     HoaDon a = new HoaDon();
                     a.TachTT(s, DSNV, DSSP, DSKH);
-                    HDlist.add(a);
+                    add(a);
                 }
             }
             brhd.close();
@@ -55,8 +72,8 @@ public class DanhSachHoaDon implements DocGhiFile {
     public void GhiFile() {
         try {
             PrintWriter pw = new PrintWriter(tenFile);
-            for (HoaDon a : HDlist) {
-                pw.println(a.toString());
+            for (int i=0;i<n;i++) {
+                pw.println(HDlist[i].toString());
             }
             pw.flush();
             pw.close();
@@ -66,7 +83,25 @@ public class DanhSachHoaDon implements DocGhiFile {
         }
     }
 
-    public void themHoaDon(NhanVien a, KhachHang b, DanhSachSanPham dssp_Main) {
+    public void add(HoaDon a) {
+        if (n == 100) {
+            remotePN();
+            HDlist[n - 1] = new HoaDon();
+            HDlist[n - 1].copyHD(a);
+        } else {
+            n++;
+            HDlist[n - 1] = new HoaDon();
+            HDlist[n - 1].copyHD(a);
+        }
+    }
+
+    public void remotePN() {
+        for (int i = 0; i < 99; i++) {
+            HDlist[i].copyHD(HDlist[i + 1]);
+        }
+    }
+
+    public void themHoaDon(NhanVien a, DanhSachKhachHang dskh_Main, String mkh, DanhSachSanPham dssp_Main, DoanhThu DT) {
         HoaDon hd = new HoaDon();
         Random rd = new Random();
         String mhd;
@@ -77,25 +112,47 @@ public class DanhSachHoaDon implements DocGhiFile {
             }
         }
         hd = new HoaDon(mhd);
-        hd.TaoHoaDon(a, b);
+        if(mkh == null) {
+            hd.taoPhieu(a, null);
+        } else {
+            hd.taoPhieu(a, dskh_Main.SearchKH(mkh));
+        }
         do {
             System.out.print("Ma san pham: ");
             String m = input.nextLine();
-            dssp_Main.SearchByMaSP(m).toTable();
-            System.out.print("So luong: ");
-            int sl = Integer.parseInt(input.nextLine());
-            if(sl > dssp_Main.SearchByMaSP(m).getSoLuong()) {
-                System.out.println("Khong du so luong, xin thong cam.");
+            if(dssp_Main.SearchByMaSP(m)==null) {
+                System.out.println("Khong tim thay san pham.");
             } else {
-                hd.addSP(dssp_Main.SearchByMaSP(m), sl);
-                dssp_Main.SearchByMaSP(m).setSoLuong(dssp_Main.SearchByMaSP(m).getSoLuong() - sl);
+                dssp_Main.SearchByMaSP(m).toTable();
+                int sl;
+                while (true) {
+                    System.out.print("So luong: ");
+                    sl = error.inputIntNumberError(input.nextLine());
+                    if (sl < 0) {
+                        System.out.println("Khong hop le, moi nhap lai");
+                    } else {
+                        break;
+                    }
+                }
+                if (sl > dssp_Main.SearchByMaSP(m).getSoLuong()) {
+                    System.out.println("So san pham con lai khong du, xin thong cam.");
+                } else {
+                    hd.addSP(dssp_Main.SearchByMaSP(m), sl);
+                }
             }
             System.out.print("Nhan bat ki de tiep tuc, nhan 't' de thoat: ");
-        } while (input.nextLine().charAt(0) != 't');
-        hd.inHoaDon();
+        } while (error.continueString(input.nextLine()) != 't');
+        hd.inPhieu();
         System.out.print("Nhan bat ki de luu, 'h' de huy hoa don: ");
-        if(input.nextLine().charAt(0) != 'h') {
-            HDlist.add(hd);
+        if (error.continueString(input.nextLine()) != 'h') {
+            for(int i=0;i<hd.sp.length;i++) {
+                dssp_Main.SearchByMaSP(hd.getSp()[i].getMaSP()).setSoLuong2(0 - hd.getSoLuong()[i]);
+            }
+            DT.moreIN(hd.price());
+            if(mkh != null) {
+                dskh_Main.SearchKH(mkh).setDtinhluy(DSKH.SearchKH(mkh).getDtinhluy() + 1);
+            }
+            add(hd);
             GhiFile();
             System.out.println("Da luu");
         }
@@ -105,8 +162,8 @@ public class DanhSachHoaDon implements DocGhiFile {
 
     public boolean checkMaHD(String m) {
         boolean diff = true;
-        for (int i = 0; i < HDlist.size(); i++) {
-            if (HDlist.get(i).getId().equalsIgnoreCase(m)) {
+        for (int i = 0; i < n; i++) {
+            if (HDlist[i].getId().equalsIgnoreCase(m)) {
                 diff = false;
                 break;
             }
@@ -114,14 +171,10 @@ public class DanhSachHoaDon implements DocGhiFile {
         return diff;
     }
 
-    public void addHoaDon(HoaDon a) {
-        HDlist.add(a);
-    }
-
     public HoaDon searchHoaDon(String mpn) {
         int index = -1;
-        for (int i = 0; i < HDlist.size(); i++) {
-            if (HDlist.get(i).getId().equals(mpn)) {
+        for (int i = 0; i < n; i++) {
+            if (HDlist[i].getId().equals(mpn)) {
                 index = i;
                 break;
             }
@@ -129,15 +182,15 @@ public class DanhSachHoaDon implements DocGhiFile {
         if (index == -1) {
             return null;
         } else {
-            return HDlist.get(index);
+            return HDlist[index];
         }
     }
 
-    public void xuatHD() {
+    public void title() {
         System.out.println("");
-        System.out.println("+----------------------------------------------------------------------+");
-        System.out.println("|                            LICH SU HOA DON                           |");
-        System.out.println("+------------+------------+---------------+---------------+------------+");
+        System.out.println("+------------------------------------------------------------------------------+");
+        System.out.println("|                               LICH SU HOA DON                                |");
+        System.out.println("+------------+------------+---------------+---------------+--------------------+");
         System.out.print("|");
         System.out.printf("%-12s", "Ngay thang");
         System.out.print("|");
@@ -147,51 +200,82 @@ public class DanhSachHoaDon implements DocGhiFile {
         System.out.print("|");
         System.out.printf("%-15s", "Ma khach hang");
         System.out.print("|");
-        System.out.printf("%-12s", "Gia tri");
+        System.out.printf("%-20s", "Gia tri");
         System.out.println("|");
-        System.out.println("+------------+------------+---------------+---------------+------------+");
-        for (HoaDon a : HDlist) {
-            System.out.print("|");
-            System.out.printf("%-12s", a.getDate().toString());
-            System.out.print("|");
-            System.out.printf("%-12s", a.getId());
-            System.out.print("|");
-            if (a.getKh() == null) {
-                System.out.printf("%-15s", a.getNv().getMaNV());
-                System.out.print("|");
-                System.out.printf("%-15s", "null");
-                System.out.print("|");
-            } else {
-                System.out.printf("%-15s", a.getNv().getMaNV());
-                System.out.print("|");
-                System.out.printf("%-15s", a.getKh().getMaKH());
-                System.out.print("|");
+        System.out.println("+------------+------------+---------------+---------------+--------------------+");
+    }
+
+    public void xuatHD() {
+        if (n == 0) {
+            System.out.println("Danh sach trong!");
+        } else {
+            title();
+            for (int i=0;i<n;i++) {
+                HDlist[i].xuat();
             }
-            System.out.printf("%-12s", a.priceSale());
-            System.out.println("|");
+            System.out.println("+------------+------------+---------------+---------------+--------------------+");
         }
-        System.out.println("+------------+------------+---------------+---------------+------------+");
     }
 
     public void xemHoaDon() {
         xuatHD();
-        String mpn;
+        String mhd;
         do {
-            System.out.print("Nhap ma hoa don de xem chi tiet, 't' de thoat: ");
-            mpn = input.nextLine();
-            if (mpn.charAt(0) != 't') {
-                if (searchHoaDon(mpn) != null) {
-                    System.out.println("Ket qua: ");
-                    searchHoaDon(mpn).inHoaDon();
-                    System.out.print("Nhan phim bat ki de tiep tuc, 't' de thoat.");
-                    input.nextLine();
+            System.out.print("Nhap ma hoa don de xem chi tiet, ma nhan vien, ma khach hang, ngay de loc, 't' de thoat: ");
+            mhd = input.nextLine();
+            if (error.continueString(mhd) != 't') {
+                if(mhd.contains("HD")) {
+                    if (searchHoaDon(mhd) != null) {
+                        System.out.println("Ket qua: ");
+                        searchHoaDon(mhd).inPhieu();
+                    } else {
+                        System.out.println("Khong tim thay ket qua.");
+                    }
                 } else {
-                    System.out.println("Khong tim thay ket qua.");
-                    System.out.print("Nhan phim bat ki de tiep tuc.");
-                    input.nextLine();
+                    locHD(mhd);
+                }
+            } else {
+                break;
+            }
+            System.out.print("Nhan phim bat ki de tiep tuc, 't' de thoat: ");
+        } while (error.continueString(input.nextLine()) != 't');
+    }
+
+    public void locHD(String dk) {
+        boolean k = false;
+        if (error.checkNgay(dk)) {
+            title();
+            for (int i=0;i<n;i++) {
+                if (HDlist[i].getDate().toString().equals(dk)) {
+                    HDlist[i].xuat();
+                    k = true;
                 }
             }
-        } while (mpn.charAt(0) != 't');
+            System.out.println("+------------+------------+---------------+---------------+--------------------+");
+        } else if (dk.indexOf("NV") == 0) {
+            title();
+            for (int i=0;i<n;i++) {
+                if (HDlist[i].getNv().getMaNV().equalsIgnoreCase(dk)) {
+                    HDlist[i].xuat();
+                    k = true;
+                }
+            }
+            System.out.println("+------------+------------+---------------+---------------+--------------------+");
+        } else if(dk.indexOf("KH")==0) {
+            title();
+            for (int i=0;i<n;i++) {
+                if(HDlist[i].getKh() != null) {
+                    if (HDlist[i].getKh().getMaKH().equalsIgnoreCase(dk)) {
+                        HDlist[i].xuat();
+                        k = true;
+                    }
+                }
+            }
+            System.out.println("+------------+------------+---------------+---------------+--------------------+");
+        }
+        if (k == false) {
+            System.out.println("Khong co ket qua.");
+        }
     }
 
 }

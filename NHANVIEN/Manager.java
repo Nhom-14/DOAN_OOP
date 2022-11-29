@@ -6,21 +6,21 @@ import java.util.Scanner;
 public class Manager extends NhanVien {
     Scanner scn = new Scanner(System.in);
     private int CapBac;
-    private static int LuongCoBan;
+    private static double LuongCoBan = 0;
+    private static double LuongCoBandp = 6000000;
 
     public Manager() {
         super();
-        CapBac = 0;
-        LuongCoBan = 60000;
+        CapBac = 1;
+        loaiNV = "Manager";
     }
 
-    public Manager(String t, date ns, boolean gt, String dc, String sdt, String MaNV, int SoNgayNghi, int CapBac,
-            int LuongCoBan) {
+    public Manager(String t, date ns, boolean gt, String dc, String sdt, String MaNV, int SoNgayNghi, int CapBac) {
         super(t, ns, gt, dc, sdt, MaNV, SoNgayNghi);
         this.CapBac = CapBac;
     }
 
-    public Manager (Manager orther) {
+    public Manager(Manager orther) {
         super(orther.Ten, orther.NgaySinh, orther.GioiTinh, orther.DiaChi, orther.SDT, orther.MaNV, orther.SoNgayNghi);
         this.CapBac = orther.CapBac;
     }
@@ -34,74 +34,55 @@ public class Manager extends NhanVien {
     }
 
     public void setCapBac() {
-        System.out.print("Nhap cap bac: ");
-        setCapBac(Integer.parseInt(input.nextLine()));
+        while (true) {
+            System.out.print("Nhap cap bac: ");
+            CapBac = error.inputIntNumberError(input.nextLine());
+            if (CapBac < 0 || CapBac > 3) {
+                System.out.println("Khong hop le, moi nhap lai.");
+            } else {
+                break;
+            }
+        }
     }
 
-    public int getLuongCoBan() {
+    public static double getLuongCoBan() {
         return LuongCoBan;
     }
 
-    public void setLuongCoBan(int luongCoBan) {
+    public static void setLuongCoBan(double luongCoBan) {
         LuongCoBan = luongCoBan;
     }
 
-    public void setLuongCoBan() {
-        System.out.print("Luong co ban: ");
-        setLuongCoBan(Integer.parseInt(input.nextLine()));
+    public static double getLuongCoBandp() {
+        return LuongCoBandp;
     }
 
-    @Override
-    public void setMaNV(String Manv) {
-        String ddf = "^M\\d{5}$";
-        boolean Inputtrue = false;
-        do {
-            if (super.checkMaNV(ddf, Manv) == true) {
-                Inputtrue = true;
-                super.setMaNV(Manv);
+    public static void setLuongCoBan() {
+        while (true) {
+            System.out.print("Luong co ban(Manager): ");
+            LuongCoBan = error.inputDoubleNumberError(input.nextLine());
+            if (LuongCoBan < 0) {
+                System.out.println("Khong hop le, moi nhap lai.");
             } else {
-                System.out.println("Nhap sai moi nhap lai! ");
-                System.out.print("Nhap ma Manager(M_____): ");
-                Manv = input.nextLine();
+                break;
             }
-        } while (Inputtrue == false);
-    }
-
-    @Override
-    public void nhapNV() {
-        System.out.print("Nhap ma Manager(M_____): ");
-        setMaNV(input.nextLine());
-        setTen();
-        setNgaySinh();
-        setGioiTinh();
-        setDiaChi();
-        setCapBac(CapBac);
-        getTk().setUserName(getMaNV());
-        getTk().setPassword();
-    }
-
-    // @Override
-    // public void xuatNV() {
-    //     super.xuatNV();
-    //     System.out.println("\tCapBac: " + getCapBac() + "\tLuong co ban: " + getLuongCoBan());
-    // }
-
-    @Override
-    public double TinhLuong() {
-        if (getCapBac() == 1) {
-            return getLuongCoBan() * 1.5 - SoNgayNghi;
-        } else if (getCapBac() == 2) {
-            return getLuongCoBan() * 2 - SoNgayNghi;
-        } else if (getCapBac() == 3) {
-            return getLuongCoBan() * 3 - SoNgayNghi;
-        } else {
-            return -1;
         }
     }
 
     @Override
+    public double TinhLuong() {
+        if (getCapBac() == 1) {
+            return getLuongCoBan() + 2000000 - SoNgayNghi * LuongCoBan * 0.05;
+        } else if (getCapBac() == 2) {
+            return getLuongCoBan() + 3000000 - SoNgayNghi * LuongCoBan * 0.05;
+        } else {
+            return getLuongCoBan() + 4000000 - SoNgayNghi * LuongCoBan * 0.05;
+        } 
+    }
+
+    @Override
     public String toString() {
-        return super.toString() + ";" + CapBac + "," + LuongCoBan;
+        return super.toString() + "," + CapBac + "," + getTk().getPassword();
     }
 
     @Override
@@ -119,5 +100,10 @@ public class Manager extends NhanVien {
         setCapBac(Integer.parseInt(word[7]));
         tk.setUserName(word[0]);
         tk.setPassword(word[8]);
+    }
+
+    @Override
+    public void setWord() {
+        setCapBac();
     }
 }

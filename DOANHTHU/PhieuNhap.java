@@ -5,15 +5,11 @@ import SANPHAM.*;
 import java.util.Arrays;
 
 import BASE.date;
+import KHACHHANG.DanhSachKhachHang;
+import KHACHHANG.KhachHang;
 
-public class PhieuNhap {
-    private String id;
-    private date Date;
-    private NhanVien nv;
-    private int n;
-    private SanPham[] sp;
-    private int[] soLuong;
-
+public class PhieuNhap extends Phieu {
+    
     public PhieuNhap() {
         id = null;
         n = 0;
@@ -30,55 +26,18 @@ public class PhieuNhap {
         soLuong = new int[n];
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void copyPN(PhieuNhap orther) {
+        setId(orther.id);
+        setNv(orther.nv);
+        setDate(orther.Date);
+        for (int i = 0; i < orther.n; i++) {
+            addSP(orther.sp[i], orther.soLuong[i]);
+        }
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setN(int n) {
-        this.n = n;
-    }
-
-    public int getN() {
-        return n;
-    }
-
-    public void setNv(NhanVien nv) {
-        this.nv = nv;
-    }
-
-    public NhanVien getNv() {
-        return nv;
-    }
-
-    public void setSp(SanPham[] sp) {
-        this.sp = sp;
-    }
-
-    public SanPham[] getSp() {
-        return sp;
-    }
-
-    public void setSoLuong(int[] soLuong) {
-        this.soLuong = soLuong;
-    }
-
-    public int[] getSoLuong() {
-        return soLuong;
-    }
-
-    public void setDate(date date) {
-        Date = date;
-    }
-
-    public date getDate() {
-        return Date;
-    }
-
-    public void TaoPhieuNhap(NhanVien a) {
+    @Override
+    public void taoPhieu(NhanVien a, KhachHang b) {
         if (a instanceof Manager) {
             nv = new Manager((Manager) a);
         } else if (a instanceof FullTime) {
@@ -90,6 +49,7 @@ public class PhieuNhap {
 
     }
 
+    @Override
     public void addSP(SanPham a, int sl) {
         sp = Arrays.copyOf(sp, n + 1);
         soLuong = Arrays.copyOf(soLuong, n + 1);
@@ -104,6 +64,7 @@ public class PhieuNhap {
         soLuong[n - 1] = sl;
     }
 
+    @Override
     public double price() {
         double price = 0;
         for (int i = 0; i < n; i++) {
@@ -112,7 +73,8 @@ public class PhieuNhap {
         return price;
     }
 
-    public void inPhieuNhap() {
+    @Override
+    public void inPhieu() {
         System.out.println("+-------------------------------------------------------------------------+");
         System.out.println("|                             PHIEU NHAP HANG                             |");
         System.out.println("+-------------------------------------------------------------------------+");
@@ -142,35 +104,60 @@ public class PhieuNhap {
         System.out.printf("%-20s", "Gia tien");
         System.out.println("|");
         for (int i = 0; i < n; i++) {
-            System.out.print("|");
-            System.out.printf("%-10s", sp[i].getMaSP());
-            System.out.print("|");
-            System.out.printf("%-30s", sp[i].getTenSP());
-            System.out.print("|");
-            System.out.printf("%-10s", soLuong[i]);
-            System.out.print("|");
-            System.out.printf("%-20s", sp[i].getGiaNhap() * soLuong[i]);
-            System.out.println("|");
+            if (sp[i] instanceof Combo) {
+                Combo a = new Combo((Combo) sp[i]);
+                System.out.print("|");
+                System.out.printf("%-10s", a.getMaSP());
+                System.out.print("|");
+                System.out.printf("%-30s", a.getTenSP());
+                System.out.print("|");
+                System.out.printf("%-10s", soLuong[i]);
+                System.out.print("|");
+                System.out.printf("%-20s", a.getGiaNhap() * soLuong[i]);
+                System.out.println("|");
+                for (int j = 0; j < a.getArrSP().length; j++) {
+                    System.out.print("|");
+                    System.out.printf("%-10s", "");
+                    System.out.print("|");
+                    System.out.printf("%-30s", a.getArrSP()[j]);
+                    System.out.print("|");
+                    System.out.printf("%-10s", "");
+                    System.out.print("|");
+                    System.out.printf("%-20s", "");
+                    System.out.println("|");
+                }
+            } else {
+                System.out.print("|");
+                System.out.printf("%-10s", sp[i].getMaSP());
+                System.out.print("|");
+                System.out.printf("%-30s", sp[i].getTenSP());
+                System.out.print("|");
+                System.out.printf("%-10s", soLuong[i]);
+                System.out.print("|");
+                System.out.printf("%-20s", sp[i].getGiaNhap() * soLuong[i]);
+                System.out.println("|");
+            }
         }
         System.out.println("+----------+------------------------------+----------+--------------------+");
         System.out.print("|");
         System.out.printf("%-52s", "Tong tien");
         System.out.print("|");
-        System.out.printf("%-20s", price());
+        System.out.printf("%-20.2f", price());
         System.out.println("|");
         System.out.println("+----------------------------------------------------+--------------------+");
-        
+
     }
 
-    public void TachTT(String pn, DanhSachNhanVien a, DanhSachSanPham b) {
+    @Override
+    public void TachTT(String pn, DanhSachNhanVien a, DanhSachSanPham b, DanhSachKhachHang c) {
         String[] word = pn.split(",");
         Date.Tachtt(word[0]);
         setId(word[1]);
-        if (word[2].charAt(0) == 'M') {
+        if (word[2].indexOf("NVM") == 0) {
             nv = new Manager((Manager) a.SearchNVbyMaNV(word[2]));
-        } else if (word[2].charAt(0) == 'T') {
+        } else if (word[2].indexOf("NVF") == 0) {
             nv = new FullTime((FullTime) a.SearchNVbyMaNV(word[2]));
-        } else if (word[2].charAt(0) == 'P') {
+        } else if (word[2].indexOf("NVP") == 0) {
             nv = new PartTime((PartTime) a.SearchNVbyMaNV(word[2]));
         }
         setN(word.length - 3);
@@ -190,12 +177,26 @@ public class PhieuNhap {
 
     }
 
+    @Override
     public String toString() {
         String s = Date.toString() + "," + id + "," + nv.getMaNV();
         for (int i = 0; i < n; i++) {
             s = s + "," + sp[i].getMaSP() + "#" + soLuong[i];
         }
         return s;
+    }
+
+    @Override
+    public void xuat() {
+        System.out.print("|");
+        System.out.printf("%-12s", Date.toString());
+        System.out.print("|");
+        System.out.printf("%-12s", id);
+        System.out.print("|");
+        System.out.printf("%-25s", nv.getMaNV());
+        System.out.print("|");
+        System.out.printf("%-20.2f", price());
+        System.out.println("|");
     }
 
 }

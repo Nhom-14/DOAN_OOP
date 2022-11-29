@@ -1,9 +1,8 @@
 package KHACHHANG;
 
 import BASE.date;
+import BASE.error;
 import BASE.ConNguoi;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class KhachHang extends ConNguoi {
     private String MaKH;
@@ -24,33 +23,15 @@ public class KhachHang extends ConNguoi {
         this.Dtinhluy = orther.Dtinhluy;
     }
 
-    @Override
-    public void Nhap() {
-        setMaKH();
+    public void Nhap(String mkh) {
+        System.out.println("Nhap thong tin khach hang: ");
+        setMaKH(mkh);
         super.Nhap();
         Dtinhluy = 0;
     }
 
     public void setMaKH(String maKH) {
         this.MaKH = maKH;
-    }
-
-    public void setMaKH() {
-        String ddmkh = "^\\d{3}$";
-        boolean check = false;
-        do {
-            System.out.print("Nhap ma khach hang (1 so co 3 chu so): ");
-            String mkh = input.nextLine();
-            Pattern pattern = Pattern.compile(ddmkh);
-            Matcher matcher;
-            matcher = pattern.matcher(mkh);
-            if (matcher.find()) {
-                check = true;
-                setMaKH(mkh);
-            } else {
-                System.out.println("Khong hop le, hay nhap lai.");
-            }
-        } while (check == false);
     }
 
     public String getMaKH() {
@@ -62,8 +43,15 @@ public class KhachHang extends ConNguoi {
     }
 
     public void setDtinhluy() {
-        System.out.print("Nhap diem tich luy: ");
-        setDtinhluy(Integer.parseInt(input.nextLine()));
+        while (true) {
+            System.out.print("Nhap diem tich luy: ");
+            Dtinhluy = error.inputIntNumberError(input.nextLine());
+            if(Dtinhluy < 0) {
+                System.out.println("Khong hop le, moi nhap lai.");
+            } else {
+                break;
+            }
+        }
     }
 
     public int getDtinhluy() {
@@ -72,19 +60,6 @@ public class KhachHang extends ConNguoi {
 
     public void congDtichluy() {
         Dtinhluy++;
-    }
-
-    public double GiamGia() {
-        if (Dtinhluy < 20) {
-            return 0;
-        } else {
-            if (Dtinhluy > 50) {
-                return 0.5;
-            } else {
-                float a = Dtinhluy;
-                return a / 100;
-            }
-        }
     }
 
     public static void Titile() {

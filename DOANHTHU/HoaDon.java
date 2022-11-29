@@ -7,14 +7,9 @@ import java.util.Arrays;
 
 import BASE.date;
 
-public class HoaDon {
-    private String id;
-    private date Date;
-    private NhanVien nv;
+public class HoaDon extends Phieu {
+   
     private KhachHang kh;
-    private int n;
-    private SanPham[] sp;
-    private int[] soLuong;
 
     public HoaDon() {
         id = null;
@@ -32,28 +27,14 @@ public class HoaDon {
         soLuong = new int[n];
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setDate(date date) {
-        Date = date;
-    }
-
-    public date getDate() {
-        return Date;
-    }
-
-    public void setNv(NhanVien nv) {
-        this.nv = nv;
-    }
-
-    public NhanVien getNv() {
-        return nv;
+    public void copyHD(HoaDon orther) {
+        setId(orther.id);
+        setNv(orther.nv);
+        setKh(orther.kh);
+        setDate(orther.Date);
+        for(int i=0;i<orther.n;i++) {
+            addSP(orther.sp[i], orther.soLuong[i]);
+        }
     }
 
     public void setKh(KhachHang kh) {
@@ -64,31 +45,8 @@ public class HoaDon {
         return kh;
     }
 
-    public void setN(int n) {
-        this.n = n;
-    }
-
-    public int getN() {
-        return n;
-    }
-
-    public void setSp(SanPham[] sp) {
-        this.sp = sp;
-    }
-
-    public SanPham[] getSp() {
-        return sp;
-    }
-
-    public void setSoLuong(int[] soLuong) {
-        this.soLuong = soLuong;
-    }
-
-    public int[] getSoLuong() {
-        return soLuong;
-    }
-
-    public void TaoHoaDon(NhanVien a, KhachHang b) {
+    @Override
+    public void taoPhieu(NhanVien a, KhachHang b) {
         if (a instanceof Manager) {
             nv = new Manager((Manager) a);
         } else if (a instanceof FullTime) {
@@ -99,10 +57,12 @@ public class HoaDon {
         Date.Today();
         if (b != null) {
             kh = new KhachHang(b);
-            b.setDtinhluy(b.getDtinhluy() + 1);
+        } else {
+            kh = null;
         }
     }
 
+    @Override
     public void addSP(SanPham a, int sl) {
         sp = Arrays.copyOf(sp, n + 1);
         soLuong = Arrays.copyOf(soLuong, n + 1);
@@ -117,7 +77,8 @@ public class HoaDon {
         soLuong[n - 1] = sl;
     }
 
-    public double priceSale() {
+    @Override
+    public double price() {
         double price = 0;
         for (int i = 0; i < n; i++) {
             price = price + sp[i].getGiaBan() * soLuong[i];
@@ -125,7 +86,7 @@ public class HoaDon {
         if (kh == null) {
             return price;
         } else {
-            if (kh.getDtinhluy() >= 20) {
+            if (kh.getDtinhluy() < 20) {
                 return price;
             } else {
                 return price - price * 0.2;
@@ -133,7 +94,8 @@ public class HoaDon {
         }
     }
 
-    public void inHoaDon() {
+    @Override
+    public void inPhieu() {
         System.out.println("+-------------------------------------------------------------------------+");
         System.out.println("|                                 HOA DON                                 |");
         System.out.println("+-------------------------------------------------------------------------+");
@@ -151,6 +113,7 @@ public class HoaDon {
         System.out.printf("%-73s", "Ten nhan vien: " + nv.getTen());
         System.out.println("|");
         if (kh != null) {
+            System.out.println("+-------------------------------------------------------------------------+");
             System.out.println("|Thong tin khach hang:                                                    |");
             System.out.print("|");
             System.out.printf("%-73s", "Ma khach hang: " + kh.getMaKH());
@@ -158,8 +121,10 @@ public class HoaDon {
             System.out.print("|");
             System.out.printf("%-73s", "Ten khach hang: " + kh.getTen());
             System.out.println("|");
+            System.out.print("|");
             System.out.printf("%-73s", "So dien thoai: " + kh.getSDT());
             System.out.println("|");
+            System.out.print("|");
             System.out.printf("%-73s", "Diem tich luy: " + kh.getDtinhluy());
             System.out.println("|");
         }
@@ -177,8 +142,7 @@ public class HoaDon {
         System.out.println("|");
         for (int i = 0; i < n; i++) {
             if (sp[i] instanceof Combo) {
-                Combo a = new Combo();
-                a = (Combo) sp[i];
+                Combo a = new Combo((Combo) sp[i]);
                 System.out.print("|");
                 System.out.printf("%-10s", sp[i].getMaSP());
                 System.out.print("|");
@@ -186,7 +150,7 @@ public class HoaDon {
                 System.out.print("|");
                 System.out.printf("%-10s", soLuong[i]);
                 System.out.print("|");
-                System.out.printf("%-20s", sp[i].getGiaBan() * soLuong[i]);
+                System.out.printf("%-20.2f", sp[i].getGiaBan() * soLuong[i]);
                 System.out.println("|");
                 for (int j = 0; j < a.getArrSP().length; j++) {
                     System.out.print("|");
@@ -207,7 +171,7 @@ public class HoaDon {
                 System.out.print("|");
                 System.out.printf("%-10s", soLuong[i]);
                 System.out.print("|");
-                System.out.printf("%-20s", sp[i].getGiaNhap() * soLuong[i]);
+                System.out.printf("%-20s", sp[i].getGiaBan() * soLuong[i]);
                 System.out.println("|");
             }
         }
@@ -215,24 +179,25 @@ public class HoaDon {
         System.out.print("|");
         System.out.printf("%-52s", "Tong tien");
         System.out.print("|");
-        System.out.printf("%-20s", priceSale());
+        System.out.printf("%-20.2f", price());
         System.out.println("|");
         System.out.println("+----------------------------------------------------+--------------------+");
 
     }
 
-    public void TachTT(String pn, DanhSachNhanVien a, DanhSachSanPham b, DanhSachKhachHang c) {
-        String[] word = pn.split(",");
+    @Override
+    public void TachTT(String hd, DanhSachNhanVien a, DanhSachSanPham b, DanhSachKhachHang c) {
+        String[] word = hd.split(",");
         Date.Tachtt(word[0]);
         setId(word[1]);
-        if (word[2].charAt(0) == 'M') {
+        if (word[2].indexOf("NVM") == 0) {
             nv = new Manager((Manager) a.SearchNVbyMaNV(word[2]));
-        } else if (word[2].charAt(0) == 'T') {
+        } else if (word[2].indexOf("NVF") == 0) {
             nv = new FullTime((FullTime) a.SearchNVbyMaNV(word[2]));
-        } else if (word[2].charAt(0) == 'P') {
+        } else if (word[2].indexOf("NVP") == 0) {
             nv = new PartTime((PartTime) a.SearchNVbyMaNV(word[2]));
         }
-        if (word[3].equals("null")) {
+        if (word[3].equalsIgnoreCase("null")) {
             kh = null;
         } else {
             kh = new KhachHang(c.SearchKH(word[3]));
@@ -254,6 +219,7 @@ public class HoaDon {
 
     }
 
+    @Override
     public String toString() {
         String s = null;
         if (kh != null) {
@@ -265,5 +231,25 @@ public class HoaDon {
             s = s + "," + sp[i].getMaSP() + "#" + soLuong[i];
         }
         return s;
+    }
+
+    @Override
+    public void xuat() {
+        System.out.print("|");
+        System.out.printf("%-12s", Date.toString());
+        System.out.print("|");
+        System.out.printf("%-12s", id);
+        System.out.print("|");
+        System.out.printf("%-15s", nv.getMaNV());
+        System.out.print("|");
+        if (kh == null) {
+            System.out.printf("%-15s", "null");
+            System.out.print("|");
+        } else {
+            System.out.printf("%-15s", kh.getMaKH());
+            System.out.print("|");
+        }
+        System.out.printf("%-20.2f", price());
+        System.out.println("|");
     }
 }

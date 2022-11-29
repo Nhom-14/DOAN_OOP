@@ -61,8 +61,16 @@ public class date {
     public void NhapDate() {
         boolean check = true;
         do {
-            System.out.print("Nhap ngay thang nam (dd/mm/yy): ");
-            String s = input.nextLine();
+            String s;
+            while (true) {
+                System.out.print("Nhap ngay thang nam (dd/mm/yy): ");
+                s = input.nextLine();
+                if(error.checkNgay(s)) {
+                    break;
+                } else {
+                    System.out.println("Khong hop le, moi nhap lai.");
+                }
+            }
             String a[] = s.split("/");
             setNam(Integer.parseInt(a[2]));
             if (checkMonth(Integer.parseInt(a[1]))) {
@@ -144,5 +152,13 @@ public class date {
             }
         }
         return day;
+    }
+
+    public Boolean equals(date b) {
+        if(this.ngay == b.ngay && this.thang == b.thang && this.nam == b.nam) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

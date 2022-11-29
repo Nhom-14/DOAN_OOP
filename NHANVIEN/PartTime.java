@@ -4,13 +4,13 @@ import BASE.*;
 
 public class PartTime extends NhanVien {
     private int GioLam;
-    private static int LuongCoBanTheoGio;
+    private static double luongCoBanTheoGio = 0;
+    private static double luongCoBanTheoGiodp = 24000;
 
     public PartTime() {
         super();
-        GioLam = 0;
+        GioLam = 5;
         loaiNV = "PartTime";
-        LuongCoBanTheoGio = 24000;
     }
 
     public PartTime(String t, date ns, boolean gt, String dc, String sdt, String MaNV, int SoNgayNghi, int GioLam,
@@ -24,17 +24,29 @@ public class PartTime extends NhanVien {
         this.GioLam = orther.GioLam;
     }
 
-    public int getLuongCoBanTheoGio() {
-        return LuongCoBanTheoGio;
+    public static double getLuongCoBanTheoGio() {
+        return luongCoBanTheoGio;
     }
 
-    public void setLuongCoBanTheoGio(int luongCoBanTheoGio) {
-        LuongCoBanTheoGio = luongCoBanTheoGio;
+    public static void setLuongCoBanTheoGio(double luongCoBanTheoGio1) {
+        luongCoBanTheoGio = luongCoBanTheoGio1;
     }
 
-    public void setLuongCoBanTheoGio() {
-        System.out.print("Nhap luong co ban theo gio: ");
-        setLuongCoBanTheoGio(Integer.parseInt(input.nextLine()));
+    public static double getLuongCoBanTheoGiodp() {
+        return luongCoBanTheoGiodp;
+    }
+
+    public static void setLuongCoBanTheoGio() {
+        while (true) {
+            System.out.print("Nhap luong co ban theo gio: ");
+            luongCoBanTheoGio = error.inputDoubleNumberError(input.nextLine());
+            if(luongCoBanTheoGio<0) {
+                System.out.println("Khong hop le, moi nhap lai");
+            } else {
+                break;
+            }
+            
+        }
     }
 
     public int getGioLam() {
@@ -46,52 +58,31 @@ public class PartTime extends NhanVien {
     }
 
     public void setGioLam() {
-        System.out.print("Nhap gio lam: ");
-        setGioLam(Integer.parseInt(input.nextLine()));
-    }
-
-    @Override
-    public void setMaNV(String Manv) {
-        String ddf = "^P\\d{5}$";
-        boolean Inputtrue = false;
-        do {
-            if (super.checkMaNV(ddf, Manv) == true) {
-                Inputtrue = true;
-                super.setMaNV(Manv);
+        while(true) {
+            System.out.print("Nhap gio lam: ");
+            GioLam = error.inputIntNumberError(input.nextLine());
+            if(GioLam < 4 || GioLam > 6) {
+                System.out.println("Khong hop le, moi nhap lai.");
             } else {
-                System.out.println("Nhap sai moi nhap lai! ");
-                System.out.print("Nhap ma nhan vien PartTime(P_____): ");
-                Manv = input.nextLine();
+                break;
             }
-        } while (Inputtrue == false);
+        }
     }
 
     @Override
-    public void nhapNV() {
-        System.out.print("Nhap ma nhan vien PartTime(P_____): ");
-        setMaNV(input.nextLine());
-        setTen();
-        setNgaySinh();
-        setGioiTinh();
-        setDiaChi();
-        setGioLam();
-        getTk().setUserName(getMaNV());
-        getTk().setPassword();
-    }
-
     public double TinhLuong() {
-        return GioLam * LuongCoBanTheoGio - SoNgayNghi;
+        return GioLam * luongCoBanTheoGio * 20 - SoNgayNghi * 96000;
     }
 
     @Override
     public String toString() {
-        return super.toString() + "," + GioLam + "," + LuongCoBanTheoGio;
+        return super.toString() + "," + GioLam + "," + tk.getPassword();
     }
 
     @Override
     public void TachTT(String[] word) {
         setMaNV(word[0]);
-        setLoaiNV("FullTime");
+        setLoaiNV("PartTime");
         setTen(word[1]);
         date b = new date();
         b.Tachtt(word[2]);
@@ -103,7 +94,11 @@ public class PartTime extends NhanVien {
         setGioLam(Integer.parseInt(word[7]));
         tk.setUserName(word[0]);
         tk.setPassword(word[8]);
+    }
 
+    @Override
+    public void setWord() {
+        setGioLam();
     }
 
 }

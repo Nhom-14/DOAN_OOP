@@ -4,12 +4,12 @@ import BASE.*;
 
 public class FullTime extends NhanVien {
     private int NgayCong;
-    private static int LuongCoBan;
+    private static double LuongCoBan = 0;
+    private static double LuongCoBandp = 6000000;
 
     public FullTime() {
         super();
-        NgayCong = 0;
-        LuongCoBan = 30000;
+        NgayCong = 27;
     }
 
     public FullTime(String t, date ns, boolean gt, String dc, String sdt, String MaNV, int SoNgayNghi, int NgayCong) {
@@ -22,16 +22,28 @@ public class FullTime extends NhanVien {
         this.NgayCong= orther.NgayCong;
     }
 
-    public int getLuongCoBan() {
+    public static double getLuongCoBan() {
         return LuongCoBan;
     }
 
-    public void setLuongCoBan(int luongCoBan) {
+    public static void setLuongCoBan(double luongCoBan) {
         LuongCoBan = luongCoBan;
     }
-    public void setLuongCoBan() {
-        System.out.println("Nhap luong theo gio: ");
-        LuongCoBan = Integer.parseInt(input.nextLine());
+
+    public static double getLuongCoBandp() {
+        return LuongCoBandp;
+    }
+
+    public static void setLuongCoBan() {
+        while (true) {
+            System.out.println("Nhap luong co ban: ");
+            LuongCoBan = error.inputDoubleNumberError(input.nextLine());
+            if(LuongCoBan < 0) {
+                System.out.println("Khong hop le, moi nhap lai.");
+            } else {
+                break;
+            }
+        }
     }
 
     public int getNgayCong() {
@@ -43,62 +55,33 @@ public class FullTime extends NhanVien {
     }
 
     public void setNgayCong() {
-        System.out.print("Nhap ngay cong: ");
-        setNgayCong(Integer.parseInt(input.nextLine()));
-    }
-
-    @Override
-    public void setMaNV(String Manv) {
-        String ddf = "^T\\d{5}$";
-        boolean Inputtrue = false;
-        do {
-            if (super.checkMaNV(ddf, Manv) == true) {
-                Inputtrue = true;
-                super.setMaNV(Manv);
+        while (true) {
+            System.out.print("Nhap ngay cong: ");
+            NgayCong = error.inputIntNumberError(input.nextLine());
+            if(NgayCong < 20 || NgayCong > 30){
+                System.out.println("Khong hop le, moi nhap lai");
             } else {
-                System.out.println("Nhap sai moi nhap lai! ");
-                System.out.print("Nhap ma nhan vien FullTime(T_____): ");
-                Manv = input.nextLine();
-            }
-        } while (Inputtrue == false);
+                break;
+            }   
+        }
     }
-
-    @Override
-    public void nhapNV() {
-        System.out.print("Nhap ma nhan vien FullTime(T_____): ");
-        setMaNV(input.nextLine());
-        setTen();
-        setNgaySinh();
-        setGioiTinh();
-        setDiaChi();
-        setNgayCong(NgayCong);
-        setLuongCoBan(LuongCoBan);
-        getTk().setUserName(getMaNV());
-        getTk().getPassword();
-    }
-
-    // @Override
-    // public void xuatNV() {
-    //     super.xuatNV();
-    //     System.out.println("\tNgay Cong: " + getNgayCong() + "\tLuong co ban: " + getLuongCoBan());
-    // }
 
     @Override
     public double TinhLuong() {
-        return LuongCoBan / 27 * (NgayCong) - SoNgayNghi;
+        return LuongCoBan * (NgayCong - SoNgayNghi)/27;
         // Lương phải trả = Mức lương tháng : Số ngày phải đi làm quy định x số ngày đi
         // làm thực tế
     }
 
     @Override
     public String toString() {
-        return super.toString() + ";" + NgayCong + "," + LuongCoBan;
+        return super.toString() + "," + NgayCong + "," + getTk().getPassword();
     }
 
     @Override
     public void TachTT(String[] word) {
         setMaNV(word[0]);
-        setLoaiNV("PartTime");
+        setLoaiNV("FullTime");
         setTen(word[1]);
         date b = new date();
         b.Tachtt(word[2]);
@@ -110,5 +93,10 @@ public class FullTime extends NhanVien {
         setNgayCong(Integer.parseInt(word[7]));
         tk.setUserName(word[0]);
         tk.setPassword(word[8]);
+    }
+
+    @Override
+    public void setWord() {
+        setNgayCong();
     }
 }

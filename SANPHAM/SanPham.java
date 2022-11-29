@@ -4,6 +4,8 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import BASE.error;
+
 public abstract class SanPham {
     protected String MaSP;
     protected String TenSP;
@@ -22,13 +24,13 @@ public abstract class SanPham {
         this.SoLuong = 0;
     }
 
-    public SanPham(String MaSP, String TenSP, String TheLoai, double GiaBan, double GiaNhap,int SoLuong) {
+    public SanPham(String MaSP, String TenSP, String TheLoai, double GiaBan, double GiaNhap) {
         this.MaSP = MaSP;
         this.TenSP = TenSP;
         this.TheLoai = TheLoai;
         this.GiaBan = GiaBan;
         this.GiaNhap = GiaNhap;
-        this.SoLuong = SoLuong;
+        this.SoLuong = 50;
     }
 
     public SanPham(SanPham orther) {
@@ -37,7 +39,6 @@ public abstract class SanPham {
         this.TheLoai = orther.TheLoai;
         this.GiaBan = orther.GiaBan;
         this.GiaNhap = orther.GiaNhap;
-        this.SoLuong = orther.SoLuong;
     }
 
     public String getMaSP() {
@@ -57,8 +58,16 @@ public abstract class SanPham {
     }
 
     public void setTenSP() {
-        System.out.print("Nhap ten san pham: ");
-        TenSP = input.nextLine();
+        while (true) {
+            System.out.print("Nhap ten san pham: ");
+            String t = input.nextLine();
+            if(error.checkKiTu(t)) {
+                setTenSP(t);
+                break;
+            } else {
+                System.out.println("Khong hop le, khong duoc chua ki tu dac biet");
+            }
+        }
     }
 
     public void setTheLoai(String theLoai) {
@@ -78,8 +87,16 @@ public abstract class SanPham {
     }
 
     public void setGiaBan() {
-        System.out.print("Nhap gia ban: ");
-        GiaBan = Double.parseDouble(input.nextLine());
+        while (true) {
+            System.out.print("Nhap gia ban: ");
+            GiaBan = error.inputDoubleNumberError(input.nextLine());
+            if (GiaBan <= 0) {
+                System.out.println("Khong hop le, moi nhap lai.");
+            } else {
+                break;
+            }
+        }
+
     }
 
     public double getGiaNhap() {
@@ -91,8 +108,15 @@ public abstract class SanPham {
     }
 
     public void setGiaNhap() {
-        System.out.print("Nhap gia nhap: ");
-        GiaNhap = Double.parseDouble(input.nextLine());
+        while (true) {
+            System.out.print("Nhap gia nhap: ");
+            GiaNhap = error.inputDoubleNumberError(input.nextLine());
+            if (GiaNhap <= 0) {
+                System.out.println("Khong hop le, moi nhap lai.");
+            } else {
+                break;
+            }
+        }
     }
 
     public int getSoLuong() {
@@ -103,7 +127,17 @@ public abstract class SanPham {
         this.SoLuong = Soluong;
     }
 
-    public abstract void nhapSP();
+    public void setSoLuong2(int n) {
+        this.SoLuong = this.SoLuong + n;
+    }
+
+    public void nhapSP(String msp) {
+        setMaSP(msp);
+        setTenSP();
+        setGiaBan();
+        setGiaNhap();
+
+    }
 
     public boolean checkMasp(String format, String dt) {
         Pattern pattern = Pattern.compile(format);
@@ -161,7 +195,6 @@ public abstract class SanPham {
         System.out.println("|");
         System.out.println("+----------------------------------------------------------+");
     }
-
 
     public void toTable() {
         Title();

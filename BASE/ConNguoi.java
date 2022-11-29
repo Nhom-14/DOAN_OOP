@@ -1,8 +1,6 @@
 package BASE;
 
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ConNguoi {
     protected String Ten;
@@ -40,8 +38,16 @@ public class ConNguoi {
     }
 
     public void setTen() {
-        System.out.print("Ten: ");
-        setTen(input.nextLine());
+        while (true) {
+            System.out.print("Ten: ");
+            String t = input.nextLine();
+            if(error.checkKiTu(t)) {
+                setTen(t);
+                break;
+            } else {
+                System.out.println("Khong hop le, khong duoc chua ki tu dac biet hoac de trong.");
+            }
+        }
     }
 
     public String getTen() {
@@ -66,8 +72,16 @@ public class ConNguoi {
     }
 
     public void setDiaChi() {
-        System.out.print("Nhap dia chi: ");
-        setDiaChi(input.nextLine());
+        while (true) {
+            System.out.print("Dia chi: ");
+            String dc = input.nextLine();
+            if(error.checkAddress(dc)) {
+                setDiaChi(dc);
+                break;
+            } else {
+                System.out.println("Khong hop le, khong duoc chua ki tu dac biet hoac de trong.");
+            }
+        }
     }
 
     public String getDiaChi() {
@@ -84,7 +98,7 @@ public class ConNguoi {
 
     public void setGioiTinh() {
         System.out.print("Gioi tinh (Nam[0], Nu[1]): ");
-        int c = Integer.parseInt(input.nextLine());
+        int c = error.inputIntNumberError(input.nextLine());
         checkGioiTinh(c);
     }
 
@@ -97,8 +111,16 @@ public class ConNguoi {
     }
 
     public void setSDT() {
-        System.out.print("So dien thoai: ");
-        checkSDT(input.nextLine());
+        while (true) {
+            System.out.print("So dien thoai: ");
+            String sdt = input.nextLine();
+            if(error.checkSDT(sdt)) {
+                setSDT(sdt);
+                break;
+            } else {
+                System.out.println("So dien thoai khong hop le, moi nhap lai.");
+            }
+        }
     }
 
     public String getSDT() {
@@ -119,26 +141,6 @@ public class ConNguoi {
                 soLanLam++;
             }
         } while (c < 0 || c > 1);
-    }
-
-    public void checkSDT(String s) {
-        boolean trueInput = true;
-        String ddsdt = "^0[3|5|7|8|9]\\d{8}$";
-        Pattern pattern = Pattern.compile(ddsdt);
-        Matcher matcher;
-        do {
-            matcher = pattern.matcher(s);
-            if (matcher.find()) {
-                trueInput = true;
-                System.out.println("Nhap thanh cong");
-                setSDT(s);
-            } else {
-                trueInput = false;
-                System.out.println("Da nhap sai moi nhap lai: ");
-                System.out.print("So dien thoai: ");
-                s = input.nextLine();
-            }
-        } while (trueInput == false);
     }
 
     public void Nhap() {

@@ -5,18 +5,31 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 import BASE.*;
 import DOANHTHU.DanhSachHoaDon;
 import DOANHTHU.DanhSachPhieuNhap;
-import KHACHHANG.KhachHang;
+import DOANHTHU.DoanhThu;
+import DOANHTHU.DoanhThuThang;
+import KHACHHANG.DanhSachKhachHang;
 import NHANVIEN.NhanVien;
 
 public class DanhSachSanPham implements DocGhiFile {
     private ArrayList<SanPham> sp;
     static Scanner input = new Scanner(System.in);
     private String tenFILE = "SANPHAM/DSSP.txt";
+    String spdp[] = { "F001,Ga ran,50000,35000,30",
+            "F002,Burger bo,48000,33000,30",
+            "F003,Burger ga,45000,30000,30",
+            "F007,Pizza xuc xich,140000,70000,30",
+            "F008,Com ga,35000,20000,30",
+            "D002,Fanta,12000,5000,30",
+            "D007,Pepsi,15000,7000,30",
+            "D001,Coca Cola,12000,5000,30",
+            "F005,Salad tron,20000,10000,30",
+            "C221,Combo 2 nguoi bao gom: #Ga ran#Khoai tay chien#Coca Cola,53900,47000,30" };
 
     public DanhSachSanPham() {
         sp = new ArrayList<SanPham>();
@@ -24,6 +37,10 @@ public class DanhSachSanPham implements DocGhiFile {
 
     public DanhSachSanPham(ArrayList<SanPham> sp) {
         this.sp = sp;
+    }
+
+    public DanhSachSanPham(DanhSachSanPham orther) {
+        this.sp = orther.sp;
     }
 
     public ArrayList<SanPham> getSp() {
@@ -61,7 +78,7 @@ public class DanhSachSanPham implements DocGhiFile {
 
         } catch (Exception e) {
             System.out.println("Loi doc File danh sach san pham: ");
-            System.out.println(e.toString());
+            layTTduphong();
         }
 
     }
@@ -80,85 +97,136 @@ public class DanhSachSanPham implements DocGhiFile {
         }
     }
 
+    public void layTTduphong() {
+        for (String k : spdp) {
+            String[] word = k.split(",");
+            SanPham a;
+            if (word[0].charAt(0) == 'F') {
+                a = new Food();
+                a.TachTT(word);
+                sp.add(a);
+            } else if (word[0].charAt(0) == 'D') {
+                a = new Drink();
+                a.TachTT(word);
+                sp.add(a);
+            } else if (word[0].charAt(0) == 'C') {
+                a = new Combo();
+                a.TachTT(word);
+                sp.add(a);
+            }
+        }
+    }
+
     public void XuatSP() {
-        System.out.println("+-----------------------------------------------------------------------------------+");
-        System.out.println("|                                 DANH SACH SAN PHAM                                |");
-        SanPham.Title();
-        for (int i = 0; i < sp.size(); i++) {
-            if (sp.get(i).getMaSP().charAt(0) == 'F') {
-                sp.get(i).xuatSP();
+        if (sp.size() == 0) {
+            System.out.println("Danh sach trong!");
+        } else {
+            System.out.println("+-----------------------------------------------------------------------------------+");
+            System.out.println("|                                 DANH SACH SAN PHAM                                |");
+            SanPham.Title();
+            for (int i = 0; i < sp.size(); i++) {
+                if (sp.get(i).getMaSP().charAt(0) == 'F') {
+                    sp.get(i).xuatSP();
+                }
             }
-        }
-        for (int i = 0; i < sp.size(); i++) {
-            if (sp.get(i).getMaSP().charAt(0) == 'D') {
-                sp.get(i).xuatSP();
+            for (int i = 0; i < sp.size(); i++) {
+                if (sp.get(i).getMaSP().charAt(0) == 'D') {
+                    sp.get(i).xuatSP();
+                }
             }
-        }
-        for (int i = 0; i < sp.size(); i++) {
-            if (sp.get(i).getMaSP().charAt(0) == 'C') {
-                Combo a = (Combo) sp.get(i);
-                a.xuatSP();
+            for (int i = 0; i < sp.size(); i++) {
+                if (sp.get(i).getMaSP().charAt(0) == 'C') {
+                    Combo a = (Combo) sp.get(i);
+                    a.xuatSP();
+                }
             }
+            System.out.println("+--------+----------+------------------------------+----------+----------+----------+");
         }
-        System.out.println("+--------+----------+------------------------------+----------+----------+----------+");
 
     }
 
     public void ThemSP() {
+        Random rd = new Random();
         do {
-            System.out.print("Loai san pham(1:Food,2:Drink,3:Combo): ");
-            int choice = Integer.parseInt(input.nextLine());
+            int choice;
+            System.out.println("+-------MENU-------+");
+            System.out.println("|1.Food.           |");
+            System.out.println("|2.Drink.          |");
+            System.out.println("|3.Combo.          |");
+            System.out.println("|0.Thoat.          |");
+            System.out.println("+------------------+");
+            do {
+                System.out.print("Nhap lua chon: ");
+                choice = error.inputIntNumberError(input.nextLine());
+                if (choice < 0 || choice > 3) {
+                    System.out.println("Khong hop le, moi nhap lai");
+                }
+            } while (choice < 0 || choice > 3);
+
             switch (choice) {
                 case 1: {
                     SanPham a = new Food();
-                    a.nhapSP();
-                    if (check(a.getMaSP())) {
-                        System.out.println("Du lieu bi trung lap, hay thuc hien lai.");
-                    } else {
-                        sp.add(a);
-                        GhiFile();
-                        System.out.println("Them thanh cong.");
+                    String msp;
+                    while (true) {
+                        msp = "F" + rd.nextInt(1000);
+                        if (check(msp)) {
+                            a.nhapSP(msp);
+                            break;
+                        }
                     }
+                    sp.add(a);
+                    GhiFile();
+                    System.out.println("Them thanh cong.");
                     break;
                 }
                 case 2: {
                     SanPham a = new Drink();
-                    a.nhapSP();
-                    if (check(a.getMaSP())) {
-                        System.out.println("Du lieu bi trung lap, hay thuc hien lai.");
-                    } else {
-                        sp.add(a);
-                        GhiFile();
-                        System.out.println("Them thanh cong.");
+                    String msp;
+                    while (true) {
+                        msp = "D" + rd.nextInt(1000);
+                        if (check(msp)) {
+                            a.nhapSP(msp);
+                            break;
+                        }
                     }
+                    sp.add(a);
+                    GhiFile();
+                    System.out.println("Them thanh cong.");
                     break;
                 }
                 case 3: {
                     Combo a = new Combo();
-                    a.nhapSP();
-                    if (check(a.getMaSP())) {
-                        System.out.println("Du lieu bi trung lap, hay thuc hien lai.");
-                    } else {
-                        sp.add(a);
-                        GhiFile();
-                        System.out.println("Them thanh cong.");
+                    String msp;
+                    while (true) {
+                        msp = "C" + rd.nextInt(1000);
+                        if (check(msp)) {
+                            a.nhapSP(msp);
+                            break;
+                        }
                     }
+                    sp.add(a);
+                    GhiFile();
+                    System.out.println("Them thanh cong.");
+                    break;
+                }
+
+                case 0: {
                     break;
                 }
             }
-            System.out.print("nhan phim bat ki de nhap tiep, nhan 't' de thoat: ");
-        } while (input.nextLine().charAt(0) != 't');
+            System.out.print("Nhan phim bat ki de them tiep, nhan 't' de thoat: ");
+        } while (error.continueString(input.nextLine()) != 't');
     }
 
     public boolean check(String msp) {
-        boolean same = false;
+        boolean diff = true;
         for (SanPham a : sp) {
             if (a.getMaSP().equalsIgnoreCase(msp)) {
-                same = true;
+                diff = false;
                 break;
             }
         }
-        return same;
+        return diff;
     }
 
     public void TimKiemSPbyMaSP() {
@@ -190,153 +258,136 @@ public class DanhSachSanPham implements DocGhiFile {
     }
 
     public void TimKiemSPbyTheLoai() {
-        System.out.print("Loai san pham muon tim(1:Food,2:Drink,3:Combo): ");
-        int choice = Integer.parseInt(input.nextLine());
+        int choice;
+        do {
+            System.out.print("Loai san pham muon tim(1:Food,2:Drink,3:Combo,0:Thoat): ");
+            choice = error.inputIntNumberError(input.nextLine());
+            if (choice < 0 || choice > 3) {
+                System.out.println("Khong hop le, moi nhap lai.");
+            }
+        } while (choice < 0 || choice > 3);
+
+        DanhSachSanPham a = new DanhSachSanPham();
         switch (choice) {
             case 1: {
-                System.out.println("Ket qua trung khop: ");
-                SearchSPbyTheLoai(choice).XuatSP();
+                for (int i = 0; i < sp.size(); i++) {
+                    if (sp.get(i) instanceof Food) {
+                        a.sp.add(this.sp.get(i));
+                    }
+                }
                 break;
             }
             case 2: {
-                System.out.println("Ket qua trung khop: ");
-                SearchSPbyTheLoai(choice).XuatSP();
+                for (int i = 0; i < sp.size(); i++) {
+                    if (sp.get(i) instanceof Drink) {
+                        a.sp.add(this.sp.get(i));
+                    }
+                }
                 break;
             }
             case 3: {
-                System.out.println("Ket qua trung khop: ");
-                SearchSPbyTheLoai(choice).XuatSP();
+                for (int i = 0; i < sp.size(); i++) {
+                    if (sp.get(i) instanceof Combo) {
+                        Combo b = (Combo) sp.get(i);
+                        a.sp.add(b);
+                    }
+                }
+                break;
+            }
+            case 0: {
                 break;
             }
         }
-        if (choice < 1 || choice > 3) {
+        if (a.sp.size() == 0) {
             System.out.println("Khong tim thay ket qua.");
+        } else {
+            System.out.println("Ket qua trung khop: ");
+            a.XuatSP();
         }
         System.out.print("Nhan phim bat ki de tiep tuc.");
         input.nextLine();
-    }
-
-    public DanhSachSanPham SearchSPbyTheLoai(int n) {
-        DanhSachSanPham a = new DanhSachSanPham();
-        if (n == 1) {
-            for (int i = 0; i < sp.size(); i++) {
-                if (sp.get(i) instanceof Food) {
-                    a.sp.add(this.sp.get(i));
-                }
-            }
-        } else if (n == 2) {
-            for (int i = 0; i < sp.size(); i++) {
-                if (sp.get(i) instanceof Drink) {
-                    a.sp.add(this.sp.get(i));
-                }
-            }
-        } else {
-            for (int i = 0; i < sp.size(); i++) {
-                if (sp.get(i) instanceof Combo) {
-                    Combo b = (Combo) sp.get(i);
-                    a.sp.add(b);
-                }
-            }
-        }
-        return a;
     }
 
     public void TimKiemSPbyTenSP() {
         System.out.print("Nhap ten san pham muon tim: ");
-        String m = input.nextLine();
-        DanhSachSanPham s = new DanhSachSanPham(SearchByTenSP(m).sp);
-        if (s.sp.size() == 0) {
-            System.out.println("Khong tim thay ket qua.");
-        } else {
-            System.out.println("Ket qua trung khop: ");
-            s.XuatSP();
-        }
-        System.out.print("Nhan phim bat ki de tiep tuc.");
-        input.nextLine();
-    }
-
-    public DanhSachSanPham SearchByTenSP(String tsp) {
+        String tsp = input.nextLine();
         DanhSachSanPham a = new DanhSachSanPham();
         for (int i = 0; i < sp.size(); i++) {
             if (sp.get(i).getTenSP().contains(tsp)) {
                 a.sp.add(this.sp.get(i));
             }
         }
-        return a;
-    }
-
-    public void TimKiembyGiaBan() {
-        System.out.println("Nhap khoang gia muon tim: ");
-        System.out.print("Tu: ");
-        double start = Double.parseDouble(input.nextLine());
-        System.out.print("Den: ");
-        double end = Double.parseDouble(input.nextLine());
-        DanhSachSanPham s = new DanhSachSanPham(SearchByGiaBan(start, end).sp);
-        if (s.sp.size() == 0) {
+        if (a.sp.size() == 0) {
             System.out.println("Khong tim thay ket qua.");
         } else {
             System.out.println("Ket qua trung khop: ");
-            s.XuatSP();
+            a.XuatSP();
         }
         System.out.print("Nhan phim bat ki de tiep tuc.");
         input.nextLine();
     }
 
-    public DanhSachSanPham SearchByGiaBan(double start, double end) {
+    public void TimKiembyGiaBan() {
+        System.out.println("Nhap khoang gia muon tim: ");
+        System.out.print("Tu: ");
+        double start = error.inputDoubleNumberError(input.nextLine());
+        System.out.print("Den: ");
+        double end = error.inputDoubleNumberError(input.nextLine());
         DanhSachSanPham a = new DanhSachSanPham();
         for (int i = 0; i < sp.size(); i++) {
             if (sp.get(i).getGiaBan() >= start && sp.get(i).getGiaBan() <= end) {
                 a.sp.add(this.sp.get(i));
             }
         }
-        return a;
+        if (a.sp.size() == 0) {
+            System.out.println("Khong tim thay ket qua.");
+        } else {
+            System.out.println("Ket qua trung khop: ");
+            a.XuatSP();
+        }
+        System.out.print("Nhan phim bat ki de tiep tuc.");
+        input.nextLine();
     }
 
     public void TimKiembyGiaNhap() {
         System.out.println("Nhap khoang gia muon tim: ");
         System.out.print("Tu: ");
-        double start = Double.parseDouble(input.nextLine());
+        double start = error.inputDoubleNumberError(input.nextLine());
         System.out.print("Den: ");
-        double end = Double.parseDouble(input.nextLine());
-        DanhSachSanPham s = new DanhSachSanPham(SearchByGiaNhap(start, end).sp);
-        if (s.sp.size() == 0) {
-            System.out.println("Khong tim thay ket qua.");
-        } else {
-            System.out.println("Ket qua trung khop: ");
-            s.XuatSP();
-        }
-        System.out.print("Nhan phim bat ki de tiep tuc.");
-        input.nextLine();
-
-    }
-
-    public DanhSachSanPham SearchByGiaNhap(double start, double end) {
+        double end = error.inputDoubleNumberError(input.nextLine());
         DanhSachSanPham a = new DanhSachSanPham();
         for (int i = 0; i < sp.size(); i++) {
             if (sp.get(i).getGiaNhap() >= start && sp.get(i).getGiaNhap() <= end) {
                 a.sp.add(this.sp.get(i));
             }
         }
-        return a;
+        if (a.sp.size() == 0) {
+            System.out.println("Khong tim thay ket qua.");
+        } else {
+            System.out.println("Ket qua trung khop: ");
+            a.XuatSP();
+        }
+        System.out.print("Nhan phim bat ki de tiep tuc.");
+        input.nextLine();
+
     }
 
     public void LocSP() {
         int choice;
         do {
             System.out.println("");
-            System.out.println("+---------------------------------------+");
-            System.out.println("|         Chon tieu chi de loc:         |\n" +
-                    "+---------------------------------------+\n"+
-                    "|1. Ma san pham                         |\n" +
-                    "|2. The loai                            |\n" +
-                    "|3. Ten san pham                        |\n" +
-                    "|4. Gia ban                             |\n" +
-                    "|5. Gia Nhap                            |\n" +
-                    "|0. Thoat                               |\n" +
-                    "+---------------------------------------+");
+            System.out.println("Chon tieu chi de loc: ");
+            System.out.println("+-------MENU-------+");
+            System.out.println("|1.Ma san pham     |");
+            System.out.println("|2.The loai        |");
+            System.out.println("|3.Ten san pham    |");
+            System.out.println("|4.Gia ban         |");
+            System.out.println("|5.Gia nhap        |");
+            System.out.println("|0.Thoat.          |");
+            System.out.println("+------------------+");
             do {
-                System.out.print("Moi nhap lua chon: ");
-                choice = Integer.parseInt(input.nextLine());
+                System.out.print("Nhap lua chon: ");
+                choice = error.inputIntNumberError(input.nextLine());
                 if (choice < 0 || choice > 5) {
                     System.out.println("Lua chon khong hop le, moi nhap lai!");
                 }
@@ -393,7 +444,7 @@ public class DanhSachSanPham implements DocGhiFile {
             int choice;
             do {
                 System.out.print("Nhap lua chon: ");
-                choice = Integer.parseInt(input.nextLine());
+                choice = error.inputIntNumberError(input.nextLine());
                 if (choice < 0 || choice > 3) {
                     System.out.println("Lua chon khong hop le, moi nhap lai!");
                 }
@@ -446,9 +497,9 @@ public class DanhSachSanPham implements DocGhiFile {
                 }
             }
             System.out.println("Da xoa, nhan phim bat ki de tiep tuc.");
+            input.nextLine();
         }
     }
-
 
     public void titleMenu() {
         System.out.print("|");
@@ -469,7 +520,7 @@ public class DanhSachSanPham implements DocGhiFile {
         System.out.println("+----------------------------------------------------------+");
         titleMenu();
         for (SanPham a : sp) {
-            if(a instanceof Food) {
+            if (a instanceof Food) {
                 a.xuatMenu();
             }
         }
@@ -477,7 +528,7 @@ public class DanhSachSanPham implements DocGhiFile {
         System.out.println("+----------------------------------------------------------+");
         titleMenu();
         for (SanPham a : sp) {
-            if(a instanceof Drink) {
+            if (a instanceof Drink) {
                 a.xuatMenu();
             }
         }
@@ -485,7 +536,7 @@ public class DanhSachSanPham implements DocGhiFile {
         System.out.println("+----------------------------------------------------------+");
         titleMenu();
         for (SanPham a : sp) {
-            if(a instanceof Combo) {
+            if (a instanceof Combo) {
                 Combo b = new Combo();
                 b = (Combo) a;
                 b.xuatMenu();
@@ -494,13 +545,46 @@ public class DanhSachSanPham implements DocGhiFile {
 
     }
 
-    public void NhapHang(NhanVien a, DanhSachPhieuNhap b, DanhSachSanPham dssp_Main) {
-        b.themPhieuNhap(a, dssp_Main);
+    public void NhapHang(NhanVien a, DanhSachPhieuNhap b, DanhSachSanPham dssp_Main, DoanhThu DT, DoanhThuThang DTT_main) {
+        int choice;
+        do{
+            System.out.println("+-----------MENU-----------+");
+            System.out.println("|1.Nhap toan bo            |");
+            System.out.println("|2.Chon san pham de nhap   |");
+            System.out.println("|0.Thoat                   |");
+            System.out.println("+--------------------------+");
+            do{
+                System.out.print("Nhap lua chon: ");
+                choice = error.inputIntNumberError(input.nextLine());
+                if(choice > 2 || choice <0) {
+                    System.out.println("Khong hop le, moi nhap lai.");
+                }
+            } while(choice > 2 || choice <0);
+
+            switch(choice) {
+                case 1 :{
+                    b.NhapToanBo(a, dssp_Main, DT);
+                    DTT_main.updateDT(DT);
+                    break;
+                }
+
+                case 2 :{
+                    b.nhapHang(a, dssp_Main, DT);
+                    DTT_main.updateDT(DT);
+                    break;
+                }
+
+                case 0: {
+                    break;
+                }
+            }
+
+        } while(choice !=0);
     }
 
-    public void BanHang(NhanVien a, KhachHang c, DanhSachHoaDon b, DanhSachSanPham dssp_Main) {
+    public void BanHang(NhanVien a, DanhSachKhachHang dskh_Main, String mkh, DanhSachHoaDon b, DanhSachSanPham dssp_Main, DoanhThu DT) {
         menu();
-        b.themHoaDon(a, c, dssp_Main);
+        b.themHoaDon(a, dskh_Main, mkh, dssp_Main, DT);
     }
 
 }

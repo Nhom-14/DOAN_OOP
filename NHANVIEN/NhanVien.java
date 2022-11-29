@@ -55,6 +55,10 @@ public abstract class NhanVien extends ConNguoi {
         this.loaiNV = loaiNV;
     }
 
+    public String getLoaiNV() {
+        return loaiNV;
+    }
+
     public int getSoNgayNghi() {
         return SoNgayNghi;
     }
@@ -64,8 +68,15 @@ public abstract class NhanVien extends ConNguoi {
     }
 
     public void setSoNgayNghi() {
-        System.out.println("Nhap so ngay nghi: ");
-        setSoNgayNghi(Integer.parseInt(input.nextLine()));
+        while (true) {
+            System.out.println("Nhap so ngay nghi: ");
+            SoNgayNghi = error.inputIntNumberError(input.nextLine());
+            if (SoNgayNghi < 0) {
+                System.out.println("Khong hop le, moi nhap lai");
+            } else {
+                break;
+            }
+        }
     }
 
     public boolean checkMaNV(String format, String dt) {
@@ -92,16 +103,14 @@ public abstract class NhanVien extends ConNguoi {
         System.out.printf("%-40s", DiaChi);
         System.out.print("|");
         System.out.printf("%-12s", SDT);
-        System.out.print("|");
-        System.out.printf("%-12s", TinhLuong());
         System.out.println("|");
         System.out.println(
-                "+--------+------------+------------------------------+------------+----------------------------------------+------------+------------+");
+                "+--------+------------+------------------------------+------------+----------------------------------------+------------+");
     }
 
     public static void Title() {
         System.out.println(
-                "+--------+------------+------------------------------+------------+----------------------------------------+------------+------------+");
+                "+--------+------------+------------------------------+------------+----------------------------------------+------------+");
         System.out.print("|");
         System.out.printf("%-8s", "Ma NV");
         System.out.print("|");
@@ -114,11 +123,21 @@ public abstract class NhanVien extends ConNguoi {
         System.out.printf("%-40s", "Dia chi");
         System.out.print("|");
         System.out.printf("%-12s", "SDT");
-        System.out.print("|");
-        System.out.printf("%-12s", "Luong");
         System.out.println("|");
         System.out.println(
-                "+--------+------------+------------------------------+------------+----------------------------------------+------------+------------+");
+                "+--------+------------+------------------------------+------------+----------------------------------------+------------+");
+    }
+
+    public void xuatLuong() {
+        System.out.print("|");
+        System.out.printf("%-8s", MaNV);
+        System.out.print("|");
+        System.out.printf("%-15s", loaiNV);
+        System.out.print("|");
+        System.out.printf("%-35s", Ten);
+        System.out.print("|");
+        System.out.printf("%20.2f", TinhLuong());
+        System.out.println("|");
     }
 
     public void toTable() {
@@ -127,12 +146,26 @@ public abstract class NhanVien extends ConNguoi {
     }
 
     public String toString() {
-        return MaNV + "," + loaiNV + "," + Ten + "," + NgaySinh + "," + GioiTinh + "," + DiaChi + "," + SoNgayNghi;
+        String gt;
+        if (GioiTinh == true) {
+            gt = "1";
+        } else {
+            gt = "0";
+        }
+        return MaNV + "," + Ten + "," + NgaySinh + "," + gt + "," + DiaChi + "," + SDT + "," + SoNgayNghi;
     }
-    
-    public abstract void nhapNV();
+
+    public void nhapNV(String mnv) {
+        System.out.println("Nhap thong tin nhan vien: ");
+        setMaNV(mnv);
+        super.Nhap();
+        getTk().setUserName(getMaNV());
+        getTk().setPassword();
+    }
 
     public abstract double TinhLuong();
 
     public abstract void TachTT(String[] word);
+
+    public abstract void setWord();
 }
