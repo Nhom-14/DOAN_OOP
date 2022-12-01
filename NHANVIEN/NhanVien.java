@@ -136,6 +136,8 @@ public abstract class NhanVien extends ConNguoi {
         System.out.print("|");
         System.out.printf("%-35s", Ten);
         System.out.print("|");
+        System.out.printf("%-10s", SoNgayNghi);
+        System.out.print("|");
         System.out.printf("%20.2f", TinhLuong());
         System.out.println("|");
     }

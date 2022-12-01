@@ -9,7 +9,7 @@ import KHACHHANG.DanhSachKhachHang;
 import KHACHHANG.KhachHang;
 
 public class PhieuNhap extends Phieu {
-    
+
     public PhieuNhap() {
         id = null;
         n = 0;
@@ -34,7 +34,6 @@ public class PhieuNhap extends Phieu {
             addSP(orther.sp[i], orther.soLuong[i]);
         }
     }
-
 
     @Override
     public void taoPhieu(NhanVien a, KhachHang b) {
@@ -84,13 +83,23 @@ public class PhieuNhap extends Phieu {
         System.out.print("|");
         System.out.printf("%-73s", "Ma phieu: " + id);
         System.out.println("|");
-        System.out.println("|Thong tin nhan vien thuc hien:                                           |");
-        System.out.print("|");
-        System.out.printf("%-73s", "Ma nhan vien: " + nv.getMaNV());
-        System.out.println("|");
-        System.out.print("|");
-        System.out.printf("%-73s", "Ten nhan vien: " + nv.getTen());
-        System.out.println("|");
+        if(nv == null) {
+            System.out.println("|Thong tin nhan vien thuc hien:                                           |");
+            System.out.print("|");
+            System.out.printf("%-73s", "Ma nhan vien: " );
+            System.out.println("|");
+            System.out.print("|");
+            System.out.printf("%-73s", "Ten nhan vien: " );
+            System.out.println("|");
+        } else {
+            System.out.println("|Thong tin nhan vien thuc hien:                                           |");
+            System.out.print("|");
+            System.out.printf("%-73s", "Ma nhan vien: " + nv.getMaNV());
+            System.out.println("|");
+            System.out.print("|");
+            System.out.printf("%-73s", "Ten nhan vien: " + nv.getTen());
+            System.out.println("|");
+        }
         System.out.println("+-------------------------------------------------------------------------+");
         System.out.println("|Chi tiet phieu nhap:                                                     |");
         System.out.println("+----------+------------------------------+----------+--------------------+");
@@ -153,33 +162,49 @@ public class PhieuNhap extends Phieu {
         String[] word = pn.split(",");
         Date.Tachtt(word[0]);
         setId(word[1]);
-        if (word[2].indexOf("NVM") == 0) {
-            nv = new Manager((Manager) a.SearchNVbyMaNV(word[2]));
-        } else if (word[2].indexOf("NVF") == 0) {
-            nv = new FullTime((FullTime) a.SearchNVbyMaNV(word[2]));
-        } else if (word[2].indexOf("NVP") == 0) {
-            nv = new PartTime((PartTime) a.SearchNVbyMaNV(word[2]));
+        if(a.SearchNVbyMaNV(word[2]) != null) {
+            if (word[2].indexOf("NVM") == 0) {
+                nv = new Manager((Manager) a.SearchNVbyMaNV(word[2]));
+            } else if (word[2].indexOf("NVF") == 0) {
+                nv = new FullTime((FullTime) a.SearchNVbyMaNV(word[2]));
+            } else if (word[2].indexOf("NVP") == 0) {
+                nv = new PartTime((PartTime) a.SearchNVbyMaNV(word[2]));
+            }
+        } else {
+            nv = null;
         }
         setN(word.length - 3);
         sp = new SanPham[n];
         soLuong = new int[n];
-        for (int i = 3; i < word.length; i++) {
-            String[] k = word[i].split("#");
-            if (k[0].charAt(0) == 'F') {
-                sp[i - 3] = new Food((Food) b.SearchByMaSP(k[0]));
-            } else if (k[0].charAt(0) == 'D') {
-                sp[i - 3] = new Drink((Drink) b.SearchByMaSP(k[0]));
-            } else if (k[0].charAt(0) == 'C') {
-                sp[i - 3] = new Combo((Combo) b.SearchByMaSP(k[0]));
-            }
-            soLuong[i - 3] = Integer.parseInt(k[1]);
+        int j = 3;
+        int i = 0;
+        while (j < word.length) {
+            String[] k = word[j].split("#");
+            if (b.SearchByMaSP(k[0]) != null) {
+                if (k[0].charAt(0) == 'F') {
+                    sp[i] = new Food((Food) b.SearchByMaSP(k[0]));
+                } else if (k[0].charAt(0) == 'D') {
+                    sp[i] = new Drink((Drink) b.SearchByMaSP(k[0]));
+                } else if (k[0].charAt(0) == 'C') {
+                    sp[i] = new Combo((Combo) b.SearchByMaSP(k[0]));
+                }
+                soLuong[i] = Integer.parseInt(k[1]);
+                i++;
+            } 
+            j++;
         }
+        setN(i);
 
     }
 
     @Override
     public String toString() {
-        String s = Date.toString() + "," + id + "," + nv.getMaNV();
+        String s;
+        if(nv == null) {
+            s = Date.toString() + "," + id + "," + "null";
+        } else {
+            s = Date.toString() + "," + id + "," + nv.getMaNV();
+        }
         for (int i = 0; i < n; i++) {
             s = s + "," + sp[i].getMaSP() + "#" + soLuong[i];
         }
@@ -193,7 +218,11 @@ public class PhieuNhap extends Phieu {
         System.out.print("|");
         System.out.printf("%-12s", id);
         System.out.print("|");
-        System.out.printf("%-25s", nv.getMaNV());
+        if(nv == null) {
+            System.out.printf("%-25s", "null");
+        } else {
+            System.out.printf("%-25s", nv.getMaNV());
+        }
         System.out.print("|");
         System.out.printf("%-20.2f", price());
         System.out.println("|");

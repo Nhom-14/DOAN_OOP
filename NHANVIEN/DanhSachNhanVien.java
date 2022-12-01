@@ -231,10 +231,6 @@ public class DanhSachNhanVien {
                     a.xuatNV();
                 }
             }
-            System.out.println("Ghi chu: ");
-            System.out.println("Doi voi quan li (manager): tinh luong theo cap bac.");
-            System.out.println("Doi voi nhan vien FullTime: luong tinh theo ngay cong.");
-            System.out.println("Doi voi nhan vien PartTime: luong tinh theo gio lam");
         }
 
     }
@@ -493,9 +489,9 @@ public class DanhSachNhanVien {
     }
 
     public void BangLuong() {
-        System.out.println("+---------------------------------------------------------------------------------+");
-        System.out.println("|                              BANG LUONG NHAN VIEN                               |");
-        System.out.println("+--------+---------------+-----------------------------------+--------------------+");
+        System.out.println("+--------------------------------------------------------------------------------------------+");
+        System.out.println("|                                    BANG LUONG NHAN VIEN                                    |");
+        System.out.println("+--------+---------------+-----------------------------------+----------+--------------------+");
         System.out.print("|");
         System.out.printf("%-8s", "Ma NV");
         System.out.print("|");
@@ -503,9 +499,11 @@ public class DanhSachNhanVien {
         System.out.print("|");
         System.out.printf("%-35s", "Ho va ten");
         System.out.print("|");
+        System.out.printf("%-10s", "SNN");
+        System.out.print("|");
         System.out.printf("%20s", "Luong thang");
         System.out.println("|");
-        System.out.println("+--------+---------------+-----------------------------------+--------------------+");
+        System.out.println("+--------+---------------+-----------------------------------+----------+--------------------+");
         for (NhanVien a : NVList) {
             if (a.getMaNV().indexOf("NVM") == 0) {
                 a.xuatLuong();
@@ -521,7 +519,7 @@ public class DanhSachNhanVien {
                 a.xuatLuong();
             }
         }
-        System.out.println("+--------+--------------------------------------------------+--------------------+");
+        System.out.println("+--------+---------------+-----------------------------------+----------+--------------------+");
     }
 
     

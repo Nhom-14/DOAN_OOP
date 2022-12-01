@@ -133,7 +133,7 @@ public class MAIN {
                                         System.out.println("Khong tim thay khach hang.");
                                         System.out.print("1(Nhap lai);0(Bo qua): ");
                                         opt2 = error.inputIntNumberError(input.nextLine());
-                                        if (opt2 <= 0 && opt2 >= 1) {
+                                        if (opt2 < 0 || opt2 > 1) {
                                             System.out.println("Khong hop le, moi nhap lai.");
                                         } else {
                                             break;
@@ -390,8 +390,6 @@ public class MAIN {
 
                 case 5: {
                     DSKH.XoaKhachhang();
-                    System.out.print("Nhan phim bat ki de tiep tuc.");
-                    input.nextLine();
                     System.out.println("");
                     break;
                 }

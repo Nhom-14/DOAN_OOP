@@ -106,12 +106,21 @@ public class HoaDon extends Phieu {
         System.out.printf("%-73s", "Ma phieu: " + id);
         System.out.println("|");
         System.out.println("|Thong tin nhan vien thuc hien:                                           |");
-        System.out.print("|");
-        System.out.printf("%-73s", "Ma nhan vien: " + nv.getMaNV());
-        System.out.println("|");
-        System.out.print("|");
-        System.out.printf("%-73s", "Ten nhan vien: " + nv.getTen());
-        System.out.println("|");
+        if(nv == null) {
+            System.out.print("|");
+            System.out.printf("%-73s", "Ma nhan vien: ");
+            System.out.println("|");
+            System.out.print("|");
+            System.out.printf("%-73s", "Ten nhan vien: ");
+            System.out.println("|");
+        } else {
+            System.out.print("|");
+            System.out.printf("%-73s", "Ma nhan vien: " + nv.getMaNV());
+            System.out.println("|");
+            System.out.print("|");
+            System.out.printf("%-73s", "Ten nhan vien: " + nv.getTen());
+            System.out.println("|");
+        }
         if (kh != null) {
             System.out.println("+-------------------------------------------------------------------------+");
             System.out.println("|Thong tin khach hang:                                                    |");
@@ -190,14 +199,18 @@ public class HoaDon extends Phieu {
         String[] word = hd.split(",");
         Date.Tachtt(word[0]);
         setId(word[1]);
-        if (word[2].indexOf("NVM") == 0) {
-            nv = new Manager((Manager) a.SearchNVbyMaNV(word[2]));
-        } else if (word[2].indexOf("NVF") == 0) {
-            nv = new FullTime((FullTime) a.SearchNVbyMaNV(word[2]));
-        } else if (word[2].indexOf("NVP") == 0) {
-            nv = new PartTime((PartTime) a.SearchNVbyMaNV(word[2]));
+        if(a.SearchNVbyMaNV(word[2]) != null) {
+            if (word[2].indexOf("NVM") == 0) {
+                nv = new Manager((Manager) a.SearchNVbyMaNV(word[2]));
+            } else if (word[2].indexOf("NVF") == 0) {
+                nv = new FullTime((FullTime) a.SearchNVbyMaNV(word[2]));
+            } else if (word[2].indexOf("NVP") == 0) {
+                nv = new PartTime((PartTime) a.SearchNVbyMaNV(word[2]));
+            }
+        } else {
+            nv = null;
         }
-        if (word[3].equalsIgnoreCase("null")) {
+        if (c.SearchKH(word[3])== null) {
             kh = null;
         } else {
             kh = new KhachHang(c.SearchKH(word[3]));
@@ -205,27 +218,38 @@ public class HoaDon extends Phieu {
         setN(word.length - 4);
         sp = new SanPham[n];
         soLuong = new int[n];
-        for (int i = 4; i < word.length; i++) {
-            String[] k = word[i].split("#");
-            if (k[0].charAt(0) == 'F') {
-                sp[i - 4] = new Food((Food) b.SearchByMaSP(k[0]));
-            } else if (k[0].charAt(0) == 'D') {
-                sp[i - 4] = new Drink((Drink) b.SearchByMaSP(k[0]));
-            } else if (k[0].charAt(0) == 'C') {
-                sp[i - 4] = new Combo((Combo) b.SearchByMaSP(k[0]));
-            }
-            soLuong[i - 4] = Integer.parseInt(k[1]);
+        int j = 4;
+        int i = 0;
+        while (j < word.length) {
+            String[] k = word[j].split("#");
+            if(b.SearchByMaSP(k[0])!=null) {
+                if (k[0].charAt(0) == 'F') {
+                    sp[i] = new Food((Food) b.SearchByMaSP(k[0]));
+                } else if (k[0].charAt(0) == 'D') {
+                    sp[i] = new Drink((Drink) b.SearchByMaSP(k[0]));
+                } else if (k[0].charAt(0) == 'C') {
+                    sp[i] = new Combo((Combo) b.SearchByMaSP(k[0]));
+                }
+                soLuong[i] = Integer.parseInt(k[1]);
+                i++;
+            } 
+            j++;
         }
-
+        setN(i);
     }
 
     @Override
     public String toString() {
-        String s = null;
-        if (kh != null) {
-            s = Date.toString() + "," + id + "," + nv.getMaNV() + "," + kh.getMaKH();
+        String s;
+        if(nv != null) {
+            s = Date.toString() + "," + id + "," + nv.getMaNV();
         } else {
-            s = Date.toString() + "," + id + "," + nv.getMaNV() + "," + "null";
+            s = Date.toString() + "," + id + "," + "null";
+        }
+        if (kh != null) {
+            s = s + "," + kh.getMaKH();
+        } else {
+            s = s + "," + "null";
         }
         for (int i = 0; i < n; i++) {
             s = s + "," + sp[i].getMaSP() + "#" + soLuong[i];
@@ -240,7 +264,11 @@ public class HoaDon extends Phieu {
         System.out.print("|");
         System.out.printf("%-12s", id);
         System.out.print("|");
-        System.out.printf("%-15s", nv.getMaNV());
+        if(nv == null) {
+            System.out.printf("%-15s", "null");
+        } else {
+            System.out.printf("%-15s", nv.getMaNV());
+        }
         System.out.print("|");
         if (kh == null) {
             System.out.printf("%-15s", "null");

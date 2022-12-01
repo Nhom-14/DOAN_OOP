@@ -45,7 +45,7 @@ public class Combo extends SanPham {
             System.out.print("Nhap ten Combo: ");
             String t = input.nextLine();
             if(error.checkKiTu(t)) {
-                setTenSP(input.nextLine() + " bao gom:");
+                setTenSP(t + " bao gom:");
                 break;
             } else {
                 System.out.println("Khong hop le, khong duoc chua ki tu dac biet.");

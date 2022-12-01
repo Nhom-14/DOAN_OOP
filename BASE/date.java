@@ -91,7 +91,11 @@ public class date {
     }
 
     public String toString() {
-        return ngay + "/" + thang + "/" + nam;
+        if(ngay < 10) {
+            return "0" + ngay + "/" + thang + "/" + nam;
+        } else {
+            return ngay + "/" + thang + "/" + nam;
+        }
     }
 
     public void Tachtt(String d) {
