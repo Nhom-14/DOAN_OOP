@@ -7,6 +7,7 @@ import DOANHTHU.DoanhThu;
 import DOANHTHU.DoanhThuThang;
 import KHACHHANG.DanhSachKhachHang;
 import NHANVIEN.DanhSachNhanVien;
+import NHANVIEN.Manager;
 import NHANVIEN.NhanVien;
 import SANPHAM.DanhSachSanPham;
 
@@ -43,6 +44,35 @@ public class MAIN {
         DT = new DoanhThu();
         DTT.addDT(DT);
 
+        String t;
+        do{
+            System.out.print("Nhan bat ki de nhap dang nhap tai khoan nhan vien, t de thoat: ");
+            t = input.nextLine();
+            if(error.continueString(t) != 't') {
+                System.out.print("ID nhan vien: ");
+                String id = input.nextLine();
+                System.out.print("Password: ");
+                String pass = input.nextLine();
+                if(DSNV.dangNhap(id, pass) == null) {
+                    System.out.println("Khong tim thay tai khoan");
+                }
+                else if (DSNV.dangNhap(id, pass) instanceof Manager) {
+                    menuManager(id, pass);
+                } else {
+                    menuNV(id, pass);
+                }
+            }
+        } while (error.continueString(t) != 't');
+
+        DSSP.GhiFile();
+        DSNV.GhiFile();
+        DSKH.GhiFile();
+        DSPN.GhiFile();
+        DSHD.GhiFile();
+        DTT.GhiFile();
+    }
+
+    public static void menuManager(String id, String pass) {
         int opt;
         do {
             System.out.println("");
@@ -66,99 +96,63 @@ public class MAIN {
 
             switch (opt) {
                 case 1: {
-                    System.out.println("Dang nhap tai khoan nhan vien: ");
-                    System.out.print("ID nhan vien: ");
-                    String id = input.nextLine();
-                    System.out.print("Password: ");
-                    String pass = input.nextLine();
-                    if (DSNV.dangNhap(id, pass) != null) {
-                        QuanLySP(DSNV.dangNhap(id, pass));
-                    } else {
-                        System.out.println("Khong tim thay tai khoan.");
-                        System.out.print("Nhan phim bat ki de quay lai.");
-                        input.nextLine();
-                    }
+                    QuanLySP(DSNV.dangNhap(id, pass));
                     break;
                 }
 
                 case 2: {
-                    System.out.println("Dang nhap tai khoan nhan vien: ");
-                    System.out.print("ID nhan vien: ");
-                    String id = input.nextLine();
-                    System.out.print("Password: ");
-                    String pass = input.nextLine();
-                    if (DSNV.dangNhap(id, pass) != null) {
-                        if (id.indexOf("NVM") == 0) {
-                            QuanLyNV(DSNV.dangNhap(id, pass));
-                        } else {
-                            System.out.println("Khong du quyen de su dung chuc nang nay.");
-                        }
-                    } else {
-                        System.out.println("Khong tim thay tai khoan.");
-                        System.out.print("Nhan phim bat ki de tiep tuc.");
-                        input.nextLine();
-                    }
+                    QuanLyNV(DSNV.dangNhap(id, pass));
                     break;
                 }
 
                 case 3: {
-                    System.out.println("Dang nhap tai khoan nhan vien: ");
-                    System.out.print("ID nhan vien: ");
-                    String id = input.nextLine();
-                    System.out.print("Password: ");
-                    String pass = input.nextLine();
-                    if (DSNV.dangNhap(id, pass) != null) {
-                        int k;
-                        while (true) {
-                            System.out.print("Co muon ghi thong tin khach hang?(0;1): ");
-                            k = error.inputIntNumberError(input.nextLine());
-                            if (k <= 0 && k >= 1) {
-                                System.out.println("Khong hop le, moi nhap lai.");
-                            } else {
-                                break;
-                            }
-                        }
-                        if (k == 0) {
-                            DSSP.BanHang(DSNV.dangNhap(id, pass), DSKH, null, DSHD, DSSP, DT);
-                            DTT.updateDT(DT);
+                    int k;
+                    while (true) {
+                        System.out.print("Co muon ghi thong tin khach hang?(0;1): ");
+                        k = error.inputIntNumberError(input.nextLine());
+                        if (k <= 0 && k >= 1) {
+                            System.out.println("Khong hop le, moi nhap lai.");
                         } else {
-                            String mkh;
-                            boolean again = false;
-                            do {
-                                System.out.print("Nhap ma khach hang: ");
-                                mkh = input.nextLine();
-                                if (DSKH.SearchKH(mkh) == null) {
-                                    int opt2;
-                                    while (true) {
-                                        System.out.println("Khong tim thay khach hang.");
-                                        System.out.print("1(Nhap lai);0(Bo qua): ");
-                                        opt2 = error.inputIntNumberError(input.nextLine());
-                                        if (opt2 < 0 || opt2 > 1) {
-                                            System.out.println("Khong hop le, moi nhap lai.");
-                                        } else {
-                                            break;
-                                        }
-                                    }
-                                    if (opt2 == 1) {
-                                        again = true;
+                            break;
+                        }
+                    }
+                    if (k == 0) {
+                        DSSP.BanHang(DSNV.dangNhap(id, pass), DSKH, null, DSHD, DSSP, DT);
+                        DTT.updateDT(DT);
+                    } else {
+                        String mkh;
+                        boolean again = false;
+                        do {
+                            System.out.print("Nhap ma khach hang: ");
+                            mkh = input.nextLine();
+                            if (DSKH.SearchKH(mkh) == null) {
+                                int opt2;
+                                while (true) {
+                                    System.out.println("Khong tim thay khach hang.");
+                                    System.out.print("1(Nhap lai);0(Bo qua): ");
+                                    opt2 = error.inputIntNumberError(input.nextLine());
+                                    if (opt2 < 0 || opt2 > 1) {
+                                        System.out.println("Khong hop le, moi nhap lai.");
                                     } else {
-                                        again = false;
-                                        DSSP.BanHang(DSNV.dangNhap(id, pass), DSKH, null, DSHD, DSSP, DT);
-                                        DTT.updateDT(DT);
+                                        break;
                                     }
+                                }
+                                if (opt2 == 1) {
+                                    again = true;
                                 } else {
                                     again = false;
-                                    DSSP.BanHang(DSNV.dangNhap(id, pass), DSKH, mkh, DSHD, DSSP, DT);
-                                    if (DSKH.SearchKH(mkh).getDtinhluy() >= 21) {
-                                        DSKH.SearchKH(mkh).setDtinhluy(0);
-                                    }
+                                    DSSP.BanHang(DSNV.dangNhap(id, pass), DSKH, null, DSHD, DSSP, DT);
                                     DTT.updateDT(DT);
                                 }
-                            } while (again == true);
-
-                        }
-                    } else {
-                        System.out.println("Khong tim thay tai khoan.");
+                            } else {
+                                again = false;
+                                DSSP.BanHang(DSNV.dangNhap(id, pass), DSKH, mkh, DSHD, DSSP, DT);
+                                if (DSKH.SearchKH(mkh).getDtinhluy() >= 21) {
+                                    DSKH.SearchKH(mkh).setDtinhluy(0);
+                                }
+                                DTT.updateDT(DT);
+                            }
+                        } while (again == true);
                     }
                     break;
                 }
@@ -169,39 +163,101 @@ public class MAIN {
                 }
 
                 case 5: {
-                    System.out.println("Dang nhap tai khoan nhan vien: ");
-                    System.out.print("ID nhan vien: ");
-                    String id = input.nextLine();
-                    System.out.print("Password: ");
-                    String pass = input.nextLine();
-                    if (DSNV.dangNhap(id, pass) != null) {
-                        if (id.indexOf("NVM") == 0) {
-                            QuanLyDT();
-                        } else {
-                            System.out.println("Khong du quyen de su dung chuc nang nay.");
-                        }
-                    } else {
-                        System.out.println("Khong tim thay tai khoan.");
-                        System.out.print("Nhan phim bat ki de tiep tuc.");
-                        input.nextLine();
-                    }
+                    QuanLyDT();
                     break;
                 }
 
                 case 0: {
                     break;
                 }
-
             }
 
         } while (opt != 0);
+    }
 
-        DSSP.GhiFile();
-        DSNV.GhiFile();
-        DSKH.GhiFile();
-        DSPN.GhiFile();
-        DSHD.GhiFile();
-        DTT.GhiFile();
+    public static void menuNV(String id, String pass) {
+        int opt;
+        do {
+            System.out.println("");
+            System.out.println("+---------------------------------------+");
+            System.out.println("|               MAIN MENU               |");
+            System.out.println("+---------------------------------------+");
+            System.out.println("|1. Ban hang.                           |");
+            System.out.println("|2. Quan ly tai khoan thanh vien.       |");
+            System.out.println("|0. Thoat chuong trinh.                 |");
+            System.out.println("+---------------------------------------+");
+            do {
+                System.out.print("Moi nhap lua chon: ");
+                opt = error.inputIntNumberError(input.nextLine());
+                if (opt > 2 || opt < 0) {
+                    System.out.println("Khong hop le, moi nhap lai");
+                }
+            } while (opt > 2 || opt < 0);
+
+            switch (opt) {
+                case 1: {
+                    int k;
+                    while (true) {
+                        System.out.print("Co muon ghi thong tin khach hang?(0;1): ");
+                        k = error.inputIntNumberError(input.nextLine());
+                        if (k <= 0 && k >= 1) {
+                            System.out.println("Khong hop le, moi nhap lai.");
+                        } else {
+                            break;
+                        }
+                    }
+                    if (k == 0) {
+                        DSSP.BanHang(DSNV.dangNhap(id, pass), DSKH, null, DSHD, DSSP, DT);
+                        DTT.updateDT(DT);
+                    } else {
+                        String mkh;
+                        boolean again = false;
+                        do {
+                            System.out.print("Nhap ma khach hang: ");
+                            mkh = input.nextLine();
+                            if (DSKH.SearchKH(mkh) == null) {
+                                int opt2;
+                                while (true) {
+                                    System.out.println("Khong tim thay khach hang.");
+                                    System.out.print("1(Nhap lai);0(Bo qua): ");
+                                    opt2 = error.inputIntNumberError(input.nextLine());
+                                    if (opt2 < 0 || opt2 > 1) {
+                                        System.out.println("Khong hop le, moi nhap lai.");
+                                    } else {
+                                        break;
+                                    }
+                                }
+                                if (opt2 == 1) {
+                                    again = true;
+                                } else {
+                                    again = false;
+                                    DSSP.BanHang(DSNV.dangNhap(id, pass), DSKH, null, DSHD, DSSP, DT);
+                                    DTT.updateDT(DT);
+                                }
+                            } else {
+                                again = false;
+                                DSSP.BanHang(DSNV.dangNhap(id, pass), DSKH, mkh, DSHD, DSSP, DT);
+                                if (DSKH.SearchKH(mkh).getDtinhluy() >= 21) {
+                                    DSKH.SearchKH(mkh).setDtinhluy(0);
+                                }
+                                DTT.updateDT(DT);
+                            }
+                        } while (again == true);
+                    }
+                    break;
+                }
+
+                case 2: {
+                    QuanLyTKTT();
+                    break;
+                }
+
+                case 0: {
+                    break;
+                }
+            }
+
+        } while (opt != 0);
     }
 
     public static void QuanLySP(NhanVien a) {

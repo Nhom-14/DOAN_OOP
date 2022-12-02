@@ -35,11 +35,15 @@ public class error {
     }
 
     public static char continueString(String s) {
-        try {
-            char a = s.charAt(0);
-            return a;
-        } catch (Exception e) {
+        if(s.length() > 1) {
             return 'a';
+        } else {
+            try {
+                char a = s.charAt(0);
+                return a;
+            } catch (Exception e) {
+                return 'a';
+            }
         }
 
     }
