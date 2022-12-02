@@ -91,11 +91,18 @@ public class date {
     }
 
     public String toString() {
+        String s;
         if(ngay < 10) {
-            return "0" + ngay + "/" + thang + "/" + nam;
+            s =  "0" + ngay + "/";
         } else {
-            return ngay + "/" + thang + "/" + nam;
+            s = ngay + "/";
         }
+        if(thang < 10) {
+            s = s + "0" + thang + "/" + nam;
+        } else {
+            s = s + thang + "/" + nam;
+        }
+        return s;
     }
 
     public void Tachtt(String d) {
